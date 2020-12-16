@@ -1,17 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
 
 
-
 function App() {
-
-const [results, setResults] = useState("Results go here")
-
-// let buttonTest = () => {
-//   setResults = "New results"
-// }
-
-
   return (
     <div className="App">
       <header className="App-header">
@@ -20,9 +11,7 @@ const [results, setResults] = useState("Results go here")
       </header>
 
       <main id="main">
-        <button id="test-button" onClick={() => setResults("New results")}>Test Me</button>
-
-        <div id="results">{results}</div>
+        <p>This is the working main branch</p>
       </main>
     </div>
   );

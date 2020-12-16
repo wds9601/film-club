@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  margin: 0 auto;
 }
 
 .App-header {
@@ -11,12 +12,4 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-}
-
-#test-button {
-  margin-top: 10%;
-}
-
-#results {
-  margin-top: 5%;
 }
