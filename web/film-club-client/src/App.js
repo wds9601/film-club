@@ -1,30 +1,32 @@
 import React, { useState } from 'react';
-import { Box, Button, Collapsible, Heading, Grommet, Layer, ResponsiveContext } from 'grommet';
-import { FormClose, Notification } from 'grommet-icons';
+import { Box, Button, Collapsible, Heading, Image, Grommet, Layer, ResponsiveContext, Text } from 'grommet';
+import { FormClose, Notification, FormSearch, Search } from 'grommet-icons';
 // import './App.css';
 
-// let movies = [
-//   {
-//     title: 'Drive',
-//     year: 2009,
-//     poster_url: 'https://i.ebayimg.com/images/g/V2gAAOSw7URfUkMH/s-l1600.jpg',
-//   },
-//   {
-//     title: 'Thor: Ragnorok',
-//     year: 2016,
-//     poster_url: 'https://images.fandango.com/images/fandangoblog/Thor_ChingPoster.jpg',
-//   },
-//   {
-//     title: 'Kung Fu Panda',
-//     year: 2006,
-//     poster_url: 'https://images-na.ssl-images-amazon.com/images/I/51XhnMdSQdL._AC_SY450_.jpg',
-//   }
-// ]  
+let movies = [
+  {
+    // poster_url: 'https://place-puppy.com/300x300',
+    title: 'Drive',
+    year: 2009,
+    poster_url: 'https://i.ebayimg.com/images/g/V2gAAOSw7URfUkMH/s-l1600.jpg',
+  },
+  {
+    title: 'Thor: Ragnorok',
+    year: 2016,
+    poster_url: 'https://images.fandango.com/images/fandangoblog/Thor_ChingPoster.jpg',
+  },
+  {
+    title: 'Kung Fu Panda',
+    year: 2006,
+    poster_url: 'https://images-na.ssl-images-amazon.com/images/I/51XhnMdSQdL._AC_SY450_.jpg',
+  }
+]  
 
 const theme = {
   global: {
     colors: {
-      brand: '#228BE6'
+      brand: '#228BE6',
+      bg: '#0d0d0d',
     },
     font: {
       family: 'Ubuntu',
@@ -44,9 +46,42 @@ const AppBar = (props) => (
     background="brand"
     pad={{left: 'medium', right: 'small', vertical: 'medium'}}
     elevation="medium"
-    style={{zIndex: '1' }}
+    style={{ zIndex: '1' }}
     {...props}
   />
+)
+
+const Card = (props) => (
+  <Box
+    flex
+    direction="column"
+    pad="small"
+    margin="small"
+    align="center"
+    justify="center"
+    round="small"
+    width="70%"
+    height={ {min: "25%", max: "40%"} }
+    background="#3b3b3b"
+  >
+    <Box
+      height="medium"
+      width="medium"
+      round="small"
+      overflow="hidden"
+    >
+      <Image 
+        fill
+        alt="movie poster"
+        
+        src={props.movie.poster_url}
+      ></Image>
+    </Box>
+    <Heading
+      margin="small"
+    >{props.movie.title}</Heading>
+    <Text>{props.movie.year}</Text>
+  </Box>
 )
 
 function App() {
@@ -56,15 +91,17 @@ function App() {
     <Grommet theme={theme} full>
       <ResponsiveContext.Consumer>
         { size => (
-          <Box fill>
+          <Box background="bg">
             <AppBar>
-              <Heading level='3' margin='none'>Hello Film Club! -From Grommet</Heading>
-              <Button icon={<Notification />} onClick={() => setShowSidebar(!showSidebar)} />
+              <Heading level="1" margin='none'>FilmClub <Text size="medium">by Grommet</Text></Heading>
+              <Button icon={<Search />} onClick={() => setShowSidebar(!showSidebar)} />
             </AppBar>
 
             <Box direction="row" flex overflow={{ horizontal: 'hidden' }} >
               <Box flex align="center" justify="center">
-                app body
+                {movies.map((movie, id) => (
+                  <Card key={id} movie={movie} />
+                ))}
               </Box>
               {(!showSidebar || size !== 'small') ? (
                 <Collapsible direction="horizontal" open={showSidebar}>
