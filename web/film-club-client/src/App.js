@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Collapsible, Heading, Image, Grommet, Layer, ResponsiveContext, Text } from 'grommet';
+import { Box, Button, Collapsible, Heading, Image, Grommet, Layer, ResponsiveContext, Sidebar, Text, grommet } from 'grommet';
 import { FormClose, Menu, Search } from 'grommet-icons';
 // import './App.css';
 
@@ -21,20 +21,20 @@ let movies = [
   }
 ]  
 
-const theme = {
-  global: {
-    colors: {
-      brand: '#228BE6',
-      bg: '#fcfcfc',
-    },
-    font: {
-      family: 'Ubuntu',
-      size: '18px',
-      weight: '400',
-      height: '20px',
-    }
-  }
-}
+// const theme = {
+//   global: {
+//     colors: {
+//       brand: '#228BE6',
+//       bg: '#fcfcfc',
+//     },
+//     font: {
+//       family: 'Ubuntu',
+//       size: '18px',
+//       weight: '400',
+//       height: '20px',
+//     }
+//   }
+// }
 
 const Header = (props) => (
   <Box 
@@ -43,8 +43,9 @@ const Header = (props) => (
     width="100%"
     align="center"
     justify="between"
-    background="brand"
+    background="accent-4"
     pad={{left: 'medium', right: 'small', vertical: 'medium'}}
+    margin={{bottom: 'large'}}
     elevation="small"
     style={{ 
       zIndex: '1',
@@ -59,20 +60,23 @@ const PosterCard = (props) => (
     flex
     direction="column"
     pad="small"
-    margin="medium"
     align="center"
     justify="center"
     round="small"
-    width="80%"
+    width={{
+      "min": "30%",
+      "max": "80%"
+    }}
     height="auto"
     background="#3b3b3b"
     elevation="large"
     onClick={()=>console.log('clicked a card')}
+    margin={{bottom: "xlarge"}}
 
   >
     <Box
       height="medium"
-      width="medium"
+      width="auto"
       round="small"
       overflow="hidden"
       // border={{
@@ -82,16 +86,15 @@ const PosterCard = (props) => (
       // }}
     >
       <Image 
-        fill
-        fit="contain"
+        // fill
+        // fit="contain"
+        width="100%"
+        height="100%"
         alt="movie poster"
         src={props.movie.poster_url}
       ></Image>
     </Box>
-    <hr />
-    <Heading
-      margin="small"
-    >{props.movie.title}</Heading>
+    <Heading margin="small">{props.movie.title}</Heading>
     <Text>{props.movie.year}</Text>
   </Box>
 )
@@ -100,17 +103,17 @@ function App() {
   const [showSidebar, setShowSidebar] = useState(false)
 
   return (
-    <Grommet theme={theme} full>
+    <Grommet theme={grommet} full>
       <ResponsiveContext.Consumer>
         { size => (
-          <Box background="bg">
+          <Box background="light-3">
             <Header>
               <Button icon={<Menu />} onClick={() => setShowSidebar(!showSidebar)} />
               <Heading level="1" margin='none'>FilmClub</Heading>
               <Button icon={<Search />} />
             </Header>
 
-            <Box direction="row" flex overflow={{ horizontal: 'hidden' }} pad={{top:"20%"}}>
+            <Box direction="row" flex overflow={{ horizontal: 'hidden' }} pad={{top:"20%", bottom: "5%"}}>
               <Box flex align="center" justify="center">
                 {movies.map((movie, id) => (
                   <PosterCard key={id} movie={movie} />
@@ -121,34 +124,34 @@ function App() {
                   <Box
                     flex
                     width="medium"
+                    height="small"
                     background="light-2"
                     elevation="small"
                     align="center"
                     justify="center"
                   >
-                    sidebar
+                    menu items here
                   </Box>
                 </Collapsible>
               ) : (
-                <Layer>
-                  <Box
-                    background="light"
-                    tag="header"
-                    justify="end"
-                    align="center"
-                    direction="row"
-                  >
-                    <Button icon={<FormClose />} onClick={() => setShowSidebar(false)} />
-                  </Box>
-                  <Box
-                    fill
-                    background='light-2'
-                    align="center"
-                    justify="center"
+                  <Sidebar width="medium" collapsible="true">
+                    <Box
+                      background="light"
+                      tag="header"
+                      justify="end"
+                      align="center"
+                      direction="row"
                     >
-                      sidebar
-                  </Box>  
-                </Layer>
+                      <Button icon={<FormClose />} onClick={() => setShowSidebar(false)} />
+                    </Box>
+                    <Box
+                      background='light-2'
+                      align="center"
+                      justify="center"
+                      >
+                        menu items here
+                    </Box>  
+                  </Sidebar>
               )}
             </Box>
           </Box>
