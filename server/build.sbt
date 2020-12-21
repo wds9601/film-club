@@ -19,6 +19,7 @@ lazy val ScalaCheckVersion = "1.15.1"
 libraryDependencies ++= Seq(
   // http
   "org.http4s"            %% "http4s-blaze-server"    % Http4sVersion,
+  "org.http4s"            %% "http4s-blaze-client"    % Http4sVersion,
   "org.http4s"            %% "http4s-circe"           % Http4sVersion,
   "org.http4s"            %% "http4s-dsl"             % Http4sVersion,
 
@@ -30,6 +31,7 @@ libraryDependencies ++= Seq(
   "org.http4s"            %% "http4s-circe"           % Http4sVersion,
   "io.circe"              %% "circe-core"             % CirceVersion,
   "io.circe"              %% "circe-generic"          % CirceVersion,
+  "io.circe"              %% "circe-generic-extras"   % CirceVersion,
   "io.circe"              %% "circe-refined"          % CirceVersion,
 
   // database
@@ -54,10 +56,10 @@ libraryDependencies ++= Seq(
 )
 
 // these don't seem to play well with tagless-final style
-wartremoverErrors ++= Warts.allBut(
+wartremoverErrors in (Compile, compile) ++= Warts.allBut(
   Wart.Any,
   Wart.Nothing,
-  Wart.GlobalExecutionContext // this is fine
+  Wart.GlobalExecutionContext, // this is fine
 )
 
 resolvers += Resolver.sonatypeRepo("releases")
@@ -65,7 +67,7 @@ addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.11.2" cross Cross
 addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1")
 addCompilerPlugin(scalafixSemanticdb)
 scalacOptions += "-Yrangepos"
-scalacOptions += "-Ywarn-unused"
+scalacOptions += "-Ymacro-annotations"
 
 Compile / run / fork := true
 
