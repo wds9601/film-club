@@ -43,6 +43,10 @@ Use `sbt` to run the server:
 sbt run
 ```
 
+This may take a while to start up. You should eventually see a message that says
+```
+http4s v0.21.13 on blaze v0.14.14 started at http://[::]:8080/
+```
 You should now be able to make requests to various `localhost:8080` endpoints:
 
 ##### `echo`
@@ -80,7 +84,52 @@ will respond with an error.
 The beginning functionality for the server is started at the `films` path.
 
 - **GET** `localhost:8080/v1/films/upcoming` will provide a paginated list of
-films that will be released soon, in ascending order by their release-date.
+films that will be released soon, in ascending order by their release-date. The
+top level response will be JSON with the following properties:
+- `films`: Array of `Film`s
+- `page`: Number of current page
+- `totalPages`: Number of total pages for available for this query
+- `totalResults`: Total number of films available for this query
+
+A `Film` payload looks like the following:
+```json
+{
+  "backdropPath": "/srYya1ZlI97Au4jUYAktDe3avyA.jpg",
+  "genres": [
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    }
+  ],
+  "id": 464052,
+  "originalLanguage": "en",
+  "originalTitle": "Wonder Woman 1984",
+  "overview": "Wonder Woman comes into conflict with the Soviet Union during the Cold War in the 1980s and finds a formidable foe by the name of the Cheetah.",
+  "popularity": 974.114,
+  "posterPath": "/di1bCAfGoJ0BzNEavLsPyxQ2AaB.jpg",
+  "releaseDate": "2020-12-25",
+  "title": "Wonder Woman 1984",
+  "voteAverage": 7.1,
+  "voteCount": 111
+}
+```
 
 - **GET** `localhost:8080/v1/films/images/{imagePath}`, where `imagePath` is
 either a `poster` or `backdrop`, will return the raw image data (`jpg`).
+
+### Shutdown
+
+To shutdown the service, use `ctrl+c` to exit out of the running server. Then
+use
+```sh
+docker-compose down
+```
+to terminate the database.
