@@ -3,9 +3,13 @@ package com.molo.filmclub.client
 import com.molo.filmclub.client.FilmDataClient.UpcomingFilmsResponse
 import io.circe.generic.JsonCodec
 
+import fs2.Stream
+
 trait FilmDataClient[F[_]] {
 
   def getUpcomingFilms(page: Option[Int]): F[UpcomingFilmsResponse]
+
+  def getImage(path: String): Stream[F, Byte]
 
 }
 

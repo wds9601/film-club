@@ -9,9 +9,11 @@ import org.http4s.client.dsl.Http4sClientDsl
 import org.http4s.{EntityDecoder, Request, Uri}
 import org.joda.time.DateTime
 
+import fs2.Stream
+
 import java.util.concurrent.TimeUnit
 
-final case class TmdbConfig(baseUri: Uri, apiKey: String) {
+final case class TmdbConfig(baseUri: Uri, imagesUri: Uri, apiKey: String) {
   def defaultParams(): Map[String, String] =
     Map(
       "api_key" -> apiKey,
@@ -40,6 +42,12 @@ final class TmdbClient[F[_]: Sync: Clock](client: Client[F], config: TmdbConfig)
       val req = Request[F](uri = uri.withQueryParams(params))
       client.fetchAs[DiscoverFilmsResponse](req).map(_.toUpcomingFilmsResponse())
     }
+  }
+
+  override def getImage(path: String): Stream[F, Byte] = {
+    val uri = config.imagesUri / path
+    val req = Request[F](uri = uri.withQueryParams(config.defaultParams()))
+    client.stream(req).flatMap(_.body)
   }
 }
 
