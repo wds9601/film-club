@@ -158,3 +158,6 @@ project/plugins/project/
 
 # Just ignore all of intellij .idea/ directory
 .idea/
+
+# Environment Vars
+.vars.env
