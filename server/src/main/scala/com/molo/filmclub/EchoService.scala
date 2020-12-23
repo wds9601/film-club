@@ -10,6 +10,7 @@ import io.circe.generic.auto._
 import io.circe.refined._
 import org.http4s.circe._
 import org.http4s.dsl.Http4sDsl
+import org.http4s.server.Router
 import org.http4s.{EntityDecoder, EntityEncoder, HttpRoutes, Response}
 
 class EchoService[F[_]: Sync](dao: EchoDao[F]) extends Http4sDsl[F] {
@@ -19,13 +20,18 @@ class EchoService[F[_]: Sync](dao: EchoDao[F]) extends Http4sDsl[F] {
   private implicit val personEncoder: EntityEncoder[F, Person]           = jsonEncoderOf[F, Person]
   private implicit val personDecoder: EntityDecoder[F, Person]           = jsonOf[F, Person]
 
-  val routes: HttpRoutes[F] = HttpRoutes.of[F] {
-    case GET -> Root / "echo-int" / IntVar(n) =>
-      dao.getInt(n).map(SelectedInt).flatMap(Ok(_))
+  private val http: HttpRoutes[F] = HttpRoutes.of[F] {
+    case GET -> Root / "hello" / name =>
+      Ok(s"Hello, $name!")
+
+    case GET -> Root / "int" / IntVar(n) =>
+      Ok(dao.getInt(n).map(SelectedInt))
 
     case req @ POST -> Root / "person" =>
       req.attemptAs[Person].foldF(_ => AppError.InvalidBody.raiseError[F, Response[F]], Ok(_)) // test error handler
   }
+
+  val routes: HttpRoutes[F] = Router("echo" -> http)
 
 }
 

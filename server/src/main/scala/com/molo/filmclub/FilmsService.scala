@@ -1,7 +1,6 @@
 package com.molo.filmclub
 
 import cats.effect.Sync
-import cats.implicits._
 import com.molo.filmclub.client.FilmDataClient
 import org.http4s.circe._
 import org.http4s.dsl.Http4sDsl
@@ -18,7 +17,7 @@ final class FilmsService[F[_]: Sync](client: FilmDataClient[F]) extends Http4sDs
 
   private val http: HttpRoutes[F] = HttpRoutes.of[F] {
     case GET -> Root / "upcoming" :? PageQueryParam(page) =>
-      client.getUpcomingFilms(page).flatMap(Ok(_))
+      Ok(client.getUpcomingFilms(page))
 
     case GET -> Root / "images" / imgPath =>
       Ok(client.getImage(imgPath), `Content-Type`(MediaType.image.jpeg))
