@@ -1,11 +1,11 @@
 package com.molo.filmclub.client
 
-import com.molo.filmclub.client.FilmDataClient.LatestFilmsResponse
+import com.molo.filmclub.client.FilmDataClient.UpcomingFilmsResponse
 import io.circe.generic.JsonCodec
 
 trait FilmDataClient[F[_]] {
 
-  def getLatestFilms(page: Option[Int]): F[LatestFilmsResponse]
+  def getUpcomingFilms(page: Option[Int]): F[UpcomingFilmsResponse]
 
 }
 
@@ -15,7 +15,7 @@ object FilmDataClient {
   type GenreId = Int
 
   @JsonCodec(encodeOnly = true)
-  final case class LatestFilmsResponse(
+  final case class UpcomingFilmsResponse(
     films: List[Film],
     page: Int,
     totalPages: Int,

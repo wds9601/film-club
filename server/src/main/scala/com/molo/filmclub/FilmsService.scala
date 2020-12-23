@@ -13,11 +13,11 @@ final class FilmsService[F[_]: Sync](client: FilmDataClient[F]) extends Http4sDs
 
   private object PageQueryParam extends OptionalQueryParamDecoderMatcher[Int]("page")
 
-  private implicit val discoveredFilmEntityEncoder: EntityEncoder[F, LatestFilmsResponse] = jsonEncoderOf[F, LatestFilmsResponse]
+  private implicit val discoveredFilmEntityEncoder: EntityEncoder[F, UpcomingFilmsResponse] = jsonEncoderOf[F, UpcomingFilmsResponse]
 
   private val http: HttpRoutes[F] = HttpRoutes.of[F] {
-    case GET -> Root / "latest" :? PageQueryParam(page) =>
-      client.getLatestFilms(page).flatMap(Ok(_))
+    case GET -> Root / "upcoming" :? PageQueryParam(page) =>
+      client.getUpcomingFilms(page).flatMap(Ok(_))
   }
 
   val routes: HttpRoutes[F] = Router("films" -> http)

@@ -49,6 +49,9 @@ libraryDependencies ++= Seq(
   // logging
   "ch.qos.logback"        %  "logback-classic"        % LogbackVersion,
 
+  // Date / Time
+  "joda-time"             % "joda-time"               % "2.10.8",
+
   // tests
   "org.scalatest"         %% "scalatest"              % ScalaTestVersion  % Test,
   "org.scalacheck"        %% "scalacheck"             % ScalaCheckVersion % Test,
