@@ -7,8 +7,11 @@ import org.http4s.dsl.Http4sDsl
 import org.http4s.{HttpApp, Response}
 
 sealed trait AppError extends Exception with Product with Serializable
+
 object AppError {
+
   case object InvalidBody extends AppError
+
 }
 
 class ErrorHandler[F[_]](service: HttpApp[F])(implicit ev: ApplicativeError[F, Throwable]) extends Http4sDsl[F] {
