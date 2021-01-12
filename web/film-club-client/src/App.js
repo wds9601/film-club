@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Box, Button, Collapsible, Card, Grid, Grommet, Heading, Image, Layer, ResponsiveContext, Sidebar, Text, grommet } from 'grommet';
 import { FormClose, Menu, Search } from 'grommet-icons';
+import { deepMerge } from 'grommet/utils'
 // import './App.css';
 
 let movies = [
@@ -44,7 +45,7 @@ const Header = (props) => (
     align="center"
     justify="between"
     background="accent-4"
-    pad={{left: 'medium', right: 'small', vertical: 'medium'}}
+    pad={{"horizontal": "medium", vertical: 'medium'}}
     margin={{bottom: 'large'}}
     elevation="small"
     style={{ 
@@ -63,10 +64,7 @@ const PosterCard = (props) => (
     align="center"
     justify="center"
     round="small"
-    width={{
-      "min": "30%",
-      "max": "80%"
-    }}
+    width="auto"
     height="auto"
     background="#3b3b3b"
     elevation="large"
@@ -99,66 +97,143 @@ const PosterCard = (props) => (
   </Box>
 )
 
+const listMovies = () => {
+  console.log(movies)
+  movies.map((id, movie) => (
+    <PosterCard key={id} movie={movie} />
+  ))
+}
+
+const customBreakpoints = deepMerge(grommet, {
+  global: {
+    breakpoints: {
+      small: {
+        value: 600,
+      },
+      medium: {
+        value: 900,
+      },
+      large: {
+        value: 3000,
+      },
+    },
+  },
+})
+
+const columns = {
+  small: ['auto'],
+  medium: ['auto', 'auto'],
+  large: ['auto', 'auto', 'auto'],
+  xlarge: ['auto', 'auto', 'auto'],
+}
+
+const rows = {
+  small: ['large', 'xsmall', 'xsmall'],
+  medium: ['xsmall', 'xsmall'],
+  large: ['xsmall'],
+  xlarge: ['xsmall'],
+}
+
+const Responsive = ({
+  children,
+  ...props
+}) => {
+  const size = React.useContext(ResponsiveContext)
+  let rowsVal = rows;
+  if (rows) {
+    if (rows[size]) {
+      rowsVal = rows[size]
+    }
+  }
+
+  let columnsVal = columns;
+  if (columns) {
+    if (columns[size]) {
+      columnsVal = columns[size]
+    }
+  }
+
+  return (
+    <Grid
+      rows={ !rowsVal ? size : rowsVal }
+      columns={ !columnsVal ? size : columnsVal }
+      {...props}
+    >
+      {children}
+    </Grid>
+  )
+}
+
 function App() {
   const [showSidebar, setShowSidebar] = useState(false)
 
-  const size = useContext(ResponsiveContext)
-
   return (
-    <Grommet theme={grommet} full>
+    <Grommet theme={customBreakpoints} full>
           <Box background="light-3">
-            <Grid columns={}>
-              <Header>
-                <Button icon={<Menu />} onClick={() => setShowSidebar(!showSidebar)} />
-                <Heading level="1" margin='none'>FilmClub</Heading>
-                <Button icon={<Search />} />
-              </Header>
-
-              <Box direction="row" flex overflow={{ horizontal: 'hidden' }} pad={{top:"20%", bottom: "5%"}}>
-                <Box flex align="center" justify="center">
-                  {movies.map((movie, id) => (
-                    <PosterCard key={id} movie={movie} />
-                  ))}
-                </Box>
-                {(!showSidebar || size !== 'small') ? (
-                  <Collapsible direction="horizontal" open={showSidebar}>
-                    <Box
-                      flex
-                      width="medium"
-                      height="small"
-                      background="light-2"
-                      elevation="small"
-                      align="center"
-                      justify="center"
-                    >
-                      menu items here
-                    </Box>
-                  </Collapsible>
-                ) : (
-                    <Sidebar width="medium" collapsible="true">
-                      <Box
-                        background="light"
-                        tag="header"
-                        justify="end"
-                        align="center"
-                        direction="row"
-                      >
-                        <Button icon={<FormClose />} onClick={() => setShowSidebar(false)} />
-                      </Box>
-                      <Box
-                        background='light-2'
-                        align="center"
-                        justify="center"
-                        >
-                          menu items here
-                      </Box>  
-                    </Sidebar>
-                )}
-              </Box>
-            </Grid>
+            <Header>
+              <Button icon={<Menu />} onClick={() => setShowSidebar(!showSidebar)} />
+              <Heading level="1" margin='none'>FilmClub</Heading>
+              <Button icon={<Search />} />
+            </Header>
+            <Box height="xlarge">
+              <Responsive gap="small" margin="xlarge" >
+                {movies.map((movie, id) => (
+                  <PosterCard key={id} movie={movie} />
+                ))}
+              </Responsive>
+            </Box>
           </Box>
     </Grommet>
   );
 }
 
 export default App;
+
+
+// <Header>
+//                 <Button icon={<Menu />} onClick={() => setShowSidebar(!showSidebar)} />
+//                 <Heading level="1" margin='none'>FilmClub</Heading>
+//                 <Button icon={<Search />} />
+//               </Header>
+
+//               <Box direction="row" flex overflow={{ horizontal: 'hidden' }} pad={{top:"20%", bottom: "5%"}}>
+//                 <Box flex align="center" justify="center">
+//                   {movies.map((movie, id) => (
+//                     <PosterCard key={id} movie={movie} />
+//                   ))}
+//                 </Box>
+//                 {(!showSidebar || size !== 'small') ? (
+//                   <Collapsible direction="horizontal" open={showSidebar}>
+//                     <Box
+//                       flex
+//                       width="medium"
+//                       height="small"
+//                       background="light-2"
+//                       elevation="small"
+//                       align="center"
+//                       justify="center"
+//                     >
+//                       menu items here
+//                     </Box>
+//                   </Collapsible>
+//                 ) : (
+//                     <Sidebar width="medium" collapsible="true">
+//                       <Box
+//                         background="light"
+//                         tag="header"
+//                         justify="end"
+//                         align="center"
+//                         direction="row"
+//                       >
+//                         <Button icon={<FormClose />} onClick={() => setShowSidebar(false)} />
+//                       </Box>
+//                       <Box
+//                         background='light-2'
+//                         align="center"
+//                         justify="center"
+//                         >
+//                           menu items here
+//                       </Box>  
+//                     </Sidebar>
+//                 )}
+//               </Box>
