@@ -97,12 +97,12 @@ const PosterCard = (props) => (
   </Box>
 )
 
-const listMovies = () => {
-  console.log(movies)
-  movies.map((id, movie) => (
-    <PosterCard key={id} movie={movie} />
-  ))
-}
+// const listMovies = () => {
+//   console.log(movies)
+//   movies.map((id, movie) => (
+//     <PosterCard key={id} movie={movie} />
+//   ))
+// }
 
 const customBreakpoints = deepMerge(grommet, {
   global: {
@@ -122,23 +122,23 @@ const customBreakpoints = deepMerge(grommet, {
 
 const columns = {
   small: ['auto'],
-  medium: ['auto', 'auto'],
-  large: ['auto', 'auto', 'auto'],
-  xlarge: ['auto', 'auto', 'auto'],
+  medium: ['50%', '50%'],
+  large: ['50%', '50%'],
+  xlarge: ['50%', '50%'],
 }
 
 const rows = {
-  small: ['large', 'xsmall', 'xsmall'],
-  medium: ['xsmall', 'xsmall'],
-  large: ['xsmall'],
-  xlarge: ['xsmall'],
+  small: ['30%'],
+  medium: ['40%'],
+  large: ['50%'],
+  xlarge: ['large'],
 }
 
 const Responsive = ({
   children,
   ...props
 }) => {
-  const size = React.useContext(ResponsiveContext)
+  const size = useContext(ResponsiveContext)
   let rowsVal = rows;
   if (rows) {
     if (rows[size]) {
@@ -175,7 +175,7 @@ function App() {
               <Heading level="1" margin='none'>FilmClub</Heading>
               <Button icon={<Search />} />
             </Header>
-            <Box height="xlarge">
+            <Box height="auto" margin={{"vertical": "xlarge"}}>
               <Responsive gap="small" margin="xlarge" >
                 {movies.map((movie, id) => (
                   <PosterCard key={id} movie={movie} />
