@@ -4,23 +4,23 @@ import { FormClose, Menu, Search } from 'grommet-icons';
 import { deepMerge } from 'grommet/utils'
 // import './App.css';
 
-let movies = [
-  {
-    title: 'Thor: Ragnorok',
-    year: 2016,
-    poster_url: 'https://images.fandango.com/images/fandangoblog/Thor_ChingPoster.jpg',
-  },
-  {
-    title: 'Kung Fu Panda',
-    year: 2006,
-    poster_url: 'https://images-na.ssl-images-amazon.com/images/I/51XhnMdSQdL._AC_SY450_.jpg',
-  },
-  {
-    title: 'Drive',
-    year: 2009,
-    poster_url: 'https://i.ebayimg.com/images/g/V2gAAOSw7URfUkMH/s-l1600.jpg',
-  }
-]  
+// let movies = [
+//   {
+//     title: 'Thor: Ragnorok',
+//     year: 2016,
+//     poster_url: 'https://images.fandango.com/images/fandangoblog/Thor_ChingPoster.jpg',
+//   },
+//   {
+//     title: 'Kung Fu Panda',
+//     year: 2006,
+//     poster_url: 'https://images-na.ssl-images-amazon.com/images/I/51XhnMdSQdL._AC_SY450_.jpg',
+//   },
+//   {
+//     title: 'Drive',
+//     year: 2009,
+//     poster_url: 'https://i.ebayimg.com/images/g/V2gAAOSw7URfUkMH/s-l1600.jpg',
+//   }
+// ]  
 
 // const theme = {
 //   global: {
@@ -64,7 +64,7 @@ const PosterCard = (props) => {
       direction="column"
       pad="small"
       align="center"
-      justify="space-around"
+      justify="around"
       round="medium"
       width="auto"
       height="auto"
@@ -86,7 +86,7 @@ const PosterCard = (props) => {
           width="100%"
           height="100%"
           alt="movie poster"
-          src={props.movie.poster_url}
+          src={`http://localhost:8080/v1/films/images${props.movie.posterPath}`}
         ></Image>
       </Box>
       <Heading margin="small">{props.movie.title}</Heading>
@@ -99,7 +99,7 @@ const PosterCard = (props) => {
       direction="row"
       pad="small"
       align="center"
-      justify="space-between"
+      justify="between"
       round="medium"
       width="auto"
       height="auto"
@@ -114,6 +114,9 @@ const PosterCard = (props) => {
         width="50%"
         round="small"
         overflow="hidden"
+        margin={{
+          "right": "medium"
+        }}
       >
         <Image 
           fill
@@ -121,8 +124,22 @@ const PosterCard = (props) => {
           src={props.movie.poster_url}
         ></Image>
       </Box>
-      <Box display="flex" direction="column" flex-wrap="wrap" height="100%" width="100%" justify="space-around" align="center">
-        <Heading responsive="true" textAlign="center" size="medium">{props.movie.title}</Heading>
+      <Box 
+        display="flex" 
+        direction="column" 
+        flex-wrap="wrap" 
+        height="100%" 
+        width="100%" 
+        justify="around" 
+        align="center"
+        border={{
+          "color": "accent-4",
+          "side": "left",
+          "size": "medium",
+          "style": "solid"
+        }}
+      >
+        <Heading responsive={true} textAlign="center" size="medium">{props.movie.title}</Heading>
         <Text>{props.movie.year}</Text>
       </Box>
     </Box>
@@ -136,46 +153,7 @@ const PosterCard = (props) => {
 //   ))
 // }
 
-const getUpcomingMovies = async () => {
-  // const request = new Request("http://localhost:8080/v1/films/upcoming", {
-  //   method: 'GET',
-  //   mode: 'cors',
-  //   headers: {
-  //     'Access-Control-Allow-Origin': 'cross-site',
-  //     'Content-Type': 'application/json'
-  //   }
-  // })
 
-  const url = "http://localhost:8080/v1/films/upcoming"
-  const response = await fetch(url)
-  console.log(response)
-}
-    // const getUpcomingMovies = async () => {
-    //   const request = new Request("http://localhost:8080/v1/films/upcoming")
-    //   const response = await fetch(request)
-    //   console.log(response)
-    // }
-  
-    // const response = await fetch(request, { 
-    //   method: 'GET',
-    //   mode: 'cors',
-    //   headers: {
-    //     'Access-Control-Allow-Origin': '*',
-    //     'Content-Type': 'application/json'
-    //   }
-    // })
-    // console.log(response)
-
-
-//////
-// const url = "http://localhost:8080/v1/films/upcoming"
-
-  // .then((response) => {
-  //   console.log(response)
-  //   // const data = response.json()
-  //   // console.log(data)
-  // })
-  // .catch((err) => {console.log("ERROR #####", err)})
 
 const customBreakpoints = deepMerge(grommet, {
   global: {
@@ -239,6 +217,15 @@ const Responsive = ({
 
 function App() {
   const [showSidebar, setShowSidebar] = useState(false)
+  const [movies, setMovies] = useState({})
+
+  const getUpcomingMovies = async () => {
+    const url = "/v1/films/upcoming"
+    const response = await fetch(url)
+    const data = await response.json()
+    console.log(data.films[0])
+    setMovies(data.films)
+  }
 
   useEffect(() => {
     getUpcomingMovies()
@@ -254,9 +241,13 @@ function App() {
             </Header>
             <Box height="auto" margin={{"vertical": "xlarge"}}>
               <Responsive gap="small" margin="xlarge" >
-                {movies.map((movie, id) => (
-                  <PosterCard key={id} movie={movie} />
-                ))}
+                { (movies[0]) ? 
+                  movies.map((movie, id) => (
+                    <PosterCard key={id} movie={movie} />
+                  ))
+                  : 
+                  <Heading level="1">Loading...</Heading>
+                }
               </Responsive>
             </Box>
           </Box>
