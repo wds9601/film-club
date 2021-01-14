@@ -121,7 +121,7 @@ const PosterCard = (props) => {
         <Image 
           fill
           alt="movie poster"
-          src={props.movie.poster_url}
+          src={`http://localhost:8080/v1/films/images${props.movie.posterPath}`}
         ></Image>
       </Box>
       <Box 
@@ -175,14 +175,10 @@ const columns = {
   small: ['auto'],
   medium: ['50%', '50%'],
   large: ['50%', '50%'],
-  xlarge: ['50%', '50%'],
 }
 
 const rows = {
-  small: ['30%'],
-  medium: ['40%'],
-  large: ['50%'],
-  xlarge: ['large'],
+  small: ['auto'],
 }
 
 const Responsive = ({
