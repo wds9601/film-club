@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Box, Button, Collapsible, Card, Grid, Grommet, Heading, Image, Layer, ResponsiveContext, Sidebar, Text, grommet } from 'grommet';
 import { FormClose, Menu, Search } from 'grommet-icons';
 import { deepMerge } from 'grommet/utils'
@@ -56,46 +56,78 @@ const Header = (props) => (
   />
 )
 
-const PosterCard = (props) => (
-  <Box
-    flex
-    direction="column"
-    pad="small"
-    align="center"
-    justify="center"
-    round="small"
-    width="auto"
-    height="auto"
-    background="#3b3b3b"
-    elevation="large"
-    onClick={()=>console.log('clicked a card')}
-    margin={{bottom: "xlarge"}}
-
-  >
+const PosterCard = (props) => {
+  let size = useContext(ResponsiveContext)
+  return (size !== 'large') ? (
     <Box
-      height="medium"
+      flex
+      direction="column"
+      pad="small"
+      align="center"
+      justify="space-around"
+      round="medium"
       width="auto"
-      round="small"
-      overflow="hidden"
-      // border={{
-      //   "side": "bottom",
-      //   "style": "solid",
-      //   "size": "medium"
-      // }}
+      height="auto"
+      background="#3b3b3b"
+      elevation="large"
+      onClick={()=>console.log('clicked a card')}
+      margin={{bottom: "large"}}
+  
     >
-      <Image 
-        // fill
-        // fit="contain"
-        width="100%"
-        height="100%"
-        alt="movie poster"
-        src={props.movie.poster_url}
-      ></Image>
+      <Box
+        height="medium"
+        width="auto"
+        round="small"
+        overflow="hidden"
+      >
+        <Image 
+          // fill
+          // fit="contain"
+          width="100%"
+          height="100%"
+          alt="movie poster"
+          src={props.movie.poster_url}
+        ></Image>
+      </Box>
+      <Heading margin="small">{props.movie.title}</Heading>
+      <Text>{props.movie.year}</Text>
     </Box>
-    <Heading margin="small">{props.movie.title}</Heading>
-    <Text>{props.movie.year}</Text>
-  </Box>
-)
+  )
+  : (
+    <Box
+      flex
+      direction="row"
+      pad="small"
+      align="center"
+      justify="space-between"
+      round="medium"
+      width="auto"
+      height="auto"
+      background="#3b3b3b"
+      elevation="large"
+      onClick={()=>console.log('clicked a card')}
+      margin={{bottom: "large"}}
+  
+    >
+      <Box
+        height="100%"
+        width="50%"
+        round="small"
+        overflow="hidden"
+      >
+        <Image 
+          fill
+          alt="movie poster"
+          src={props.movie.poster_url}
+        ></Image>
+      </Box>
+      <Box display="flex" direction="column" flex-wrap="wrap" height="100%" width="100%" justify="space-around" align="center">
+        <Heading responsive="true" textAlign="center" size="medium">{props.movie.title}</Heading>
+        <Text>{props.movie.year}</Text>
+      </Box>
+    </Box>
+  )
+}
 
 // const listMovies = () => {
 //   console.log(movies)
@@ -103,6 +135,47 @@ const PosterCard = (props) => (
 //     <PosterCard key={id} movie={movie} />
 //   ))
 // }
+
+const getUpcomingMovies = async () => {
+  // const request = new Request("http://localhost:8080/v1/films/upcoming", {
+  //   method: 'GET',
+  //   mode: 'cors',
+  //   headers: {
+  //     'Access-Control-Allow-Origin': 'cross-site',
+  //     'Content-Type': 'application/json'
+  //   }
+  // })
+
+  const url = "http://localhost:8080/v1/films/upcoming"
+  const response = await fetch(url)
+  console.log(response)
+}
+    // const getUpcomingMovies = async () => {
+    //   const request = new Request("http://localhost:8080/v1/films/upcoming")
+    //   const response = await fetch(request)
+    //   console.log(response)
+    // }
+  
+    // const response = await fetch(request, { 
+    //   method: 'GET',
+    //   mode: 'cors',
+    //   headers: {
+    //     'Access-Control-Allow-Origin': '*',
+    //     'Content-Type': 'application/json'
+    //   }
+    // })
+    // console.log(response)
+
+
+//////
+// const url = "http://localhost:8080/v1/films/upcoming"
+
+  // .then((response) => {
+  //   console.log(response)
+  //   // const data = response.json()
+  //   // console.log(data)
+  // })
+  // .catch((err) => {console.log("ERROR #####", err)})
 
 const customBreakpoints = deepMerge(grommet, {
   global: {
@@ -114,7 +187,7 @@ const customBreakpoints = deepMerge(grommet, {
         value: 900,
       },
       large: {
-        value: 3000,
+        value: 2000,
       },
     },
   },
@@ -166,6 +239,10 @@ const Responsive = ({
 
 function App() {
   const [showSidebar, setShowSidebar] = useState(false)
+
+  useEffect(() => {
+    getUpcomingMovies()
+    }, [])
 
   return (
     <Grommet theme={customBreakpoints} full>
