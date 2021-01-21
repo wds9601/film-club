@@ -1,26 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Box, Button, Collapsible, Card, Grid, Grommet, Heading, Image, Layer, ResponsiveContext, Sidebar, Text, grommet } from 'grommet';
+import { Box, Button, Collapsible, Card, Grid, Grommet, Heading, Image, InfiniteScroll, InfiniteScrollProps, Layer, ResponsiveContext, Sidebar, Text, grommet } from 'grommet';
 import { FormClose, Menu, Search } from 'grommet-icons';
 import { deepMerge } from 'grommet/utils'
-// import './App.css';
-
-// let movies = [
-//   {
-//     title: 'Thor: Ragnorok',
-//     year: 2016,
-//     poster_url: 'https://images.fandango.com/images/fandangoblog/Thor_ChingPoster.jpg',
-//   },
-//   {
-//     title: 'Kung Fu Panda',
-//     year: 2006,
-//     poster_url: 'https://images-na.ssl-images-amazon.com/images/I/51XhnMdSQdL._AC_SY450_.jpg',
-//   },
-//   {
-//     title: 'Drive',
-//     year: 2009,
-//     poster_url: 'https://i.ebayimg.com/images/g/V2gAAOSw7URfUkMH/s-l1600.jpg',
-//   }
-// ]  
 
 // const theme = {
 //   global: {
@@ -89,7 +70,7 @@ const PosterCard = (props) => {
           src={`http://localhost:8080/v1/films/images${props.movie.posterPath}`}
         ></Image>
       </Box>
-      <Heading margin="small">{props.movie.title}</Heading>
+      <Heading margin="small" height="auto" width="auto">{props.movie.title}</Heading>
       <Text>{props.movie.year}</Text>
     </Box>
   )
@@ -99,7 +80,6 @@ const PosterCard = (props) => {
       direction="row"
       pad="small"
       align="center"
-      justify="between"
       round="medium"
       width="auto"
       height="auto"
@@ -115,7 +95,7 @@ const PosterCard = (props) => {
         round="small"
         overflow="hidden"
         margin={{
-          "right": "medium"
+          "right": "small"
         }}
       >
         <Image 
@@ -128,7 +108,7 @@ const PosterCard = (props) => {
         display="flex" 
         direction="column" 
         flex-wrap="wrap" 
-        height="100%" 
+        height="90%" 
         width="100%" 
         justify="around" 
         align="center"
@@ -138,22 +118,14 @@ const PosterCard = (props) => {
           "size": "medium",
           "style": "solid"
         }}
+        pad="small"
       >
-        <Heading responsive={true} textAlign="center" size="medium">{props.movie.title}</Heading>
-        <Text>{props.movie.year}</Text>
+        <Heading responsive={true} textAlign="center" level="2" size="medium" margin="none">{props.movie.title}</Heading>
+        <Text>{props.movie.releaseDate}</Text>
       </Box>
     </Box>
   )
 }
-
-// const listMovies = () => {
-//   console.log(movies)
-//   movies.map((id, movie) => (
-//     <PosterCard key={id} movie={movie} />
-//   ))
-// }
-
-
 
 const customBreakpoints = deepMerge(grommet, {
   global: {
@@ -179,6 +151,8 @@ const columns = {
 
 const rows = {
   small: ['auto'],
+  medium: ['auto'],
+  large: ['auto'],
 }
 
 const Responsive = ({
@@ -210,17 +184,72 @@ const Responsive = ({
     </Grid>
   )
 }
+//////  DETAIL PAGE (WIP) //////
+const detailPage = (props) => {
+  return (
+    <Box >
+      <Image src={`http://localhost:8080/v1/films/images${props.movie.posterPath}`}></Image>
+      <Box>
+        <Heading level="2">{props.movie.title}</Heading>
+        <br/>
+        <Text>{props.movie.overview}</Text>
+      </Box>
+    </Box>
+  )
+}
+////// ////// //////
+
+// // Infinite Scroll
+// const onMoreInfiniteScroll = ({props}) => {
+
+// }
+
+  const getUpcomingMovies = async () => {
+    // const url = "v1/films/upcoming"
+    const response = await fetch("v1/films/upcoming")
+    const data = await response.json()
+    console.log(data.films)
+    // setMovies(data.films)
+  }
 
 function App() {
   const [showSidebar, setShowSidebar] = useState(false)
-  const [movies, setMovies] = useState({})
+  const [movies, setMovies] = useState([])
+  // const [route, setRoute] = useState("")
+  // const [page, setPage] = useState(1)
 
-  const getUpcomingMovies = async () => {
-    const url = "/v1/films/upcoming"
-    const response = await fetch(url)
-    const data = await response.json()
-    console.log(data.films[0])
-    setMovies(data.films)
+  // Infinite Scroll
+  const OnMoreInfiniteScroll = ({props}) => {
+    const getNextPage = async () => {
+      let count = 2;
+      let url = `v1/films/upcoming?page=${count++}`
+      let response = await fetch(url)
+      let data = await response.json()
+      let nextMovies = data.films
+      setMovies(movies.push(nextMovies))
+      // console.log('INFINTE SCROLL DATA: ', data)
+      // setPage(count++)
+      count++
+      // console.log("Page after setPage", page)
+    }
+
+    const onMore = () => {
+      getNextPage()
+    }
+
+    return (
+      (movies[0]) ?
+        <Box >
+          <InfiniteScroll items={movies} onMore={onMore} step={20} {...props}>
+            {(movie, id) => (
+                <PosterCard key={id} movie={movie} />
+              )
+            }
+          </InfiniteScroll>
+        </Box>
+        : 
+        <Heading level="1">Loading...</Heading>
+      )
   }
 
   useEffect(() => {
@@ -235,15 +264,9 @@ function App() {
               <Heading level="1" margin='none'>FilmClub</Heading>
               <Button icon={<Search />} />
             </Header>
-            <Box height="auto" margin={{"vertical": "xlarge"}}>
-              <Responsive gap="small" margin="xlarge" >
-                { (movies[0]) ? 
-                  movies.map((movie, id) => (
-                    <PosterCard key={id} movie={movie} />
-                  ))
-                  : 
-                  <Heading level="1">Loading...</Heading>
-                }
+            <Box height="auto" margin={{"top": "xlarge"}}>
+              <Responsive gap="large" margin="xlarge" >
+                <OnMoreInfiniteScroll />
               </Responsive>
             </Box>
           </Box>
@@ -252,6 +275,33 @@ function App() {
 }
 
 export default App;
+
+
+
+
+// // // 1.16.21 Working JSX
+// return (
+//   <Grommet theme={customBreakpoints} full>
+//         <Box background="light-3">
+//           <Header>
+//             <Button icon={<Menu />} onClick={() => setShowSidebar(!showSidebar)} />
+//             <Heading level="1" margin='none'>FilmClub</Heading>
+//             <Button icon={<Search />} />
+//           </Header>
+//           <Box height="auto" margin={{"top": "xlarge"}}>
+//             <Responsive gap="large" margin="xlarge" >
+//               { (movies[0]) ? 
+//                 movies.map((movie, id) => (
+//                   <PosterCard key={id} movie={movie} />
+//                 ))
+//                 : 
+//                 <Heading level="1">Loading...</Heading>
+//               }
+//             </Responsive>
+//           </Box>
+//         </Box>
+//   </Grommet>
+// );
 
 
 // <Header>
