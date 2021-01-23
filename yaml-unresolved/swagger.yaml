@@ -124,7 +124,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UpcomingFilmsResponse'
   
-  /films/images/{imagePath}:
+  /films/images/{imageType}/{imagePath}:
     get:
       tags:
         - film
@@ -132,6 +132,14 @@ paths:
       description: Retrieve image data related to a film
       operationId: getFilmImage
       parameters:
+        - name: imageType
+          in: path
+          description: |
+            The image type to retrieve
+          required: true
+          schema:
+            type: string
+            enum: [poster, backdrop]
         - name: imagePath
           in: path
           description: |
@@ -139,6 +147,23 @@ paths:
           required: true
           schema:
             type: string
+        - name: size
+          in: query
+          description: |
+            The relative dimensions of the image to retrieve. This will depend 
+            on the `imageType`. For example, a 'small' _poster_ will request an 
+            image with a width of 154 pixels. A 'small' _backdrop_ will request 
+            an image with a width of 300 pixels. 
+            |  Size  |  Poster  | Backdrop |
+            |:------:|:--------:|:--------:|
+            |  small |    154   |    300   |
+            | medium |    342   |    780   |
+            |  large |    780   |   1280   |
+            |  full  | original | original |
+          schema:
+            type: string
+            enum: [small, medium, large, full]
+            default: small
       responses:
         200:
           description: The data for the requested image
