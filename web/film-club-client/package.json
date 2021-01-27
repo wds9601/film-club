@@ -2,19 +2,20 @@
   "name": "film-club-client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8080",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.5.0",
     "grommet": "^2.16.2",
     "grommet-icons": "^4.5.0",
+    "http-proxy-middleware": "^1.0.6",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
     "styled-components": "^5.2.1",
     "web-vitals": "^0.2.4"
   },
+  "proxy": "http://localhost:8080/v1",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
