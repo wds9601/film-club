@@ -6,23 +6,8 @@ import { deepMerge } from 'grommet/utils'
 import PosterCard from './components/PosterCard'
 import Header from './components/Header'
 
-// Grommet Custom Theming Config (not currently using)
-// const theme = {
-//   global: {
-//     colors: {
-//       brand: '#228BE6',
-//       bg: '#fcfcfc',
-//     },
-//     font: {
-//       family: 'Ubuntu',
-//       size: '18px',
-//       weight: '400',
-//       height: '20px',
-//     }
-//   }
-// }
-
-// Grommet Responsive Grid Configuration
+// // Grommet Responsive Grid Configuration
+// Declare custom Breakpoints for screen size
 const customBreakpoints = deepMerge(grommet, {
   global: {
     breakpoints: {
@@ -39,22 +24,22 @@ const customBreakpoints = deepMerge(grommet, {
   },
 })
 
+// Grid Column Layout
 const columns = {
   small: ['auto'],
   medium: ['50%', '50%'],
   large: ['50%', '50%'],
 }
 
+// Grid Row Layout
 const rows = {
   small: ['auto'],
   medium: ['auto'],
   large: ['auto'],
 }
 
-const Responsive = ({
-  children,
-  ...props
-}) => {
+// Responsive Grid Logic
+const Responsive = ({ children, ...props }) => {
   const size = useContext(ResponsiveContext)
   let rowsVal = rows;
   if (rows) {
@@ -85,23 +70,7 @@ function App() {
   const [showSidebar, setShowSidebar] = useState(false)
   const [movies, setMovies] = useState([])
 
-  // // Load all upcoming films into array for infinite scroll
-  // const loadFilms = async () => {
-  //   let count = 2;
-  //   let response = await fetch(`/films/upcoming?page=${count}`)
-  //   let nextFilms = await response.json()
-  //   console.log(nextFilms)
-  //   console.log(nextFilms.totalPages)
-  //   console.log(nextFilms.films)
-
-    // let total = nextFilms.totalPages
-    // for (let i = 2; i <= total; i++) {
-    //   let response = await fetch(`/films/upcoming?page=${i}`)
-    //   let nextFilms = await response.json()
-    //   console.log(nextFilms)
-
-    // }
-
+  // Get first batch of film data
   const getUpcomingMovies = async () => {
     const response = await fetch("/films/upcoming")
     const data = await response.json()

@@ -41,3 +41,21 @@
 // //   <PosterCard movie={item} key={index} />
 // // }}
 // // </InfiniteScroll>
+
+// // // API call + set state with all films for IScroll above
+// // Load all upcoming films into array for infinite scroll
+// const loadFilms = async () => {
+//   let count = 2;
+//   let response = await fetch(`/films/upcoming?page=${count}`)
+//   let nextFilms = await response.json()
+//   console.log(nextFilms)
+//   console.log(nextFilms.totalPages)
+//   console.log(nextFilms.films)
+
+// let total = nextFilms.totalPages
+// for (let i = 2; i <= total; i++) {
+//   let response = await fetch(`/films/upcoming?page=${i}`)
+//   let nextFilms = await response.json()
+//   console.log(nextFilms)
+
+// }
