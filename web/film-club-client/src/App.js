@@ -73,14 +73,16 @@ function App() {
 
   // Get first batch of film data
   const getUpcomingMovies = async () => {
-    const response = await fetch("/films/upcoming")
+    const page = (movies.length / 20) + 1
+    console.log(`getUpcomingMovies called for page: ${page}`)
+    const response = await fetch(`/films/upcoming?page=${page}`)
     const data = await response.json()
-    setMovies(data.films)
+    setMovies(movies.concat(data.films))
   }
 
-  useEffect(() => {
-    getUpcomingMovies()
-    }, [])
+  // useEffect(() => {
+  //   getUpcomingMovies()
+  //   }, [])
 
   return (
     <Grommet theme={customBreakpoints} full>
@@ -92,12 +94,11 @@ function App() {
             </Header>
             <Box height="auto" margin={{"top": "xlarge"}}>
               <Responsive gap="large" margin="xlarge" >
-                {movies[0] 
-                  ? movies.map((movie, id) => (
-                      <PosterCard key={id} movie={movie} />
-                    ))
-                  : <Heading level="1">Loading...</Heading>
-                }
+                <InfiniteScroll items={movies} step={20} onMore={getUpcomingMovies}>
+                  {(movie, index) => (
+                    <PosterCard movie={movie} key={index} />
+                  )}
+                </InfiniteScroll>
               </Responsive>
             </Box>
           </Box>
