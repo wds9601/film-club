@@ -28,8 +28,6 @@ const PosterCard = (props) => {
         <Image 
             fill
             fit="contain"
-            // width="100%"
-            // height="100%"
             alt="movie poster"
             src={`http://localhost:8080/v1/films/images/poster${props.movie.posterPath}?size=medium`}
         ></Image>
