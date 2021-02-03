@@ -12,7 +12,6 @@ const Header = (props) => (
         background="accent-4"
         pad={{"horizontal": "medium", vertical: 'medium'}}
         margin={{bottom: 'large'}}
-        elevation="small"
         style={{ 
             zIndex: '1',
             position: 'fixed'

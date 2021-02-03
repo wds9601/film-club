@@ -19,7 +19,7 @@ const customBreakpoints = deepMerge(grommet, {
         value: 900,
       },
       large: {
-        value: 2000,
+        value: 1600,
       },
     },
   },
@@ -29,7 +29,7 @@ const customBreakpoints = deepMerge(grommet, {
 const columns = {
   small: ['auto'],
   medium: ['50%', '50%'],
-  large: ['50%', '50%'],
+  large: ['33%', '33%', '33%'],
 }
 
 // Grid Row Layout
@@ -71,7 +71,7 @@ function App() {
   const [showSidebar, setShowSidebar] = useState(false)
   const [movies, setMovies] = useState([])
 
-  // Get first batch of film data
+  // Get all film data and concat to 'movies' array for Infinite Scroll use
   const getUpcomingMovies = async () => {
     const page = (movies.length / 20) + 1
     const response = await fetch(`/films/upcoming?page=${page}`)
@@ -81,14 +81,14 @@ function App() {
 
   return (
     <Grommet theme={customBreakpoints} full>
-          <Box background="light-3">
+          <Box background="dark-1">
             <Header>
               <Button icon={<Menu />} onClick={() => setShowSidebar(!showSidebar)} />
               <Heading level="1" margin='none'>FilmClub</Heading>
               <Button icon={<Search />} />
             </Header>
             <Box height="auto" margin={{"top": "xlarge"}}>
-              <Responsive gap="large" margin="xlarge" >
+              <Responsive gap="medium" margin="xlarge" >
                 <InfiniteScroll items={movies} step={20} onMore={getUpcomingMovies}>
                   {(movie, index) => (
                     <PosterCard movie={movie} key={index} />

@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
-import { Box, Image, Heading, ResponsiveContext, Text} from 'grommet';
+import { Anchor, Box, Image, Heading, ResponsiveContext, Text} from 'grommet';
+import { List, StatusGood } from 'grommet-icons';
 
-import defaultMoviePoster from '../static/default-movie-poster.png'
+import defaultMoviePoster from '../static/default-movie-poster.png';
 
 const PosterCard = (props) => {
     let size = useContext(ResponsiveContext)
@@ -17,81 +18,82 @@ const PosterCard = (props) => {
         direction="column"
         pad="small"
         align="center"
-        justify="around"
         round="medium"
-        width="auto"
-        height="auto"
         background="#3b3b3b"
-        elevation="large"
         onClick={()=>console.log('clicked a card')}
         margin={{bottom: "large"}}
-    
     >
-        <Box
-        height="medium"
-        width="auto"
-        round="small"
-        overflow="hidden"
-        >
-        <Image 
-            fill
-            fit="contain"
-            alt="movie poster"
-            src={imageUrl}
-        ></Image>
+        <Box fill>
+            <Image
+                alt="movie poster"
+                src={imageUrl}
+            />
         </Box>
-        <Heading margin="small" height="auto" width="auto">{props.movie.title}</Heading>
-        <Text>{props.movie.year}</Text>
+        <Box display="flex" direction="row" align="center" justify="between" width="100%">
+            <Box display="flex" direction="column" justify="center">
+                <Box>
+                    <Heading level="2">{props.movie.title}</Heading>
+                </Box>
+                <Box>
+                    <Heading level="4">{props.movie.releaseDate}</Heading>
+                </Box>
+            </Box>
+            <Box>
+                <Anchor onClick={()=> console.log('You clicked the Add to List button')} hoverIndicator={{color: "accent-2"}}>
+                    <List
+                        size="large"
+                        color="accent-4"
+                    />
+                </Anchor>
+            </Box>
+        </Box>
     </Box>
     )
     : (
     <Box
         flex
-        direction="row"
-        pad="small"
-        align="center"
-        round="medium"
-        width="auto"
+        direction="column"
+        pad="xsmall"
+        width="medium"
+        justify="center"
+        round="xsmall"
         height="auto"
         background="#3b3b3b"
-        elevation="large"
-        onClick={()=>console.log('clicked a card')}
-        margin={{bottom: "large"}}
-    
     >
-        <Box
-        height="100%"
-        width="50%"
-        round="small"
-        overflow="hidden"
-        margin={{
-            "right": "small"
-        }}
-        >
-        <Image 
-            fill
-            alt="movie poster"
-            src={imageUrl}
-        ></Image>
+        <Box onClick={()=>console.log('clicked a card')}>
+            <Image 
+                alt="movie poster"
+                src={imageUrl}
+            >
+            </Image>
         </Box>
-        <Box 
-        display="flex" 
-        direction="column" 
-        flex-wrap="wrap" 
-        height="90%" 
-        width="100%" 
-        justify="around" 
-        align="center"
-        border={{
-            "color": "accent-4",
-            "side": "left",
-            "size": "medium",
-            "style": "solid"
-        }}
-        pad="small"
+        <Box
+            display="flex"
+            direction="row"
+            justify="between"
+            width="100%"
+            pad="small"
         >
-        <Heading responsive={true} textAlign="center" level="2" size="medium" margin="none">{props.movie.title}</Heading>
-        <Text>{props.movie.releaseDate}</Text>
+            <Box>
+                <Heading 
+                    responsive={true} 
+                    textAlign="" 
+                    level="3" 
+                    size="medium" 
+                    margin="none"
+                >
+                    {props.movie.title}
+                </Heading>
+                <Text >{props.movie.releaseDate}</Text>
+            </Box>
+            <Box>
+                <Anchor onClick={()=> console.log('You clicked the Add to List button')} hoverIndicator={{color: "accent-2"}}>
+                    <List
+                        size="large"
+                        color="accent-4"
+                    />
+                </Anchor>
+            </Box>
         </Box>
     </Box>
     )
