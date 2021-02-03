@@ -1,8 +1,16 @@
 import React, { useContext } from 'react';
 import { Box, Image, Heading, ResponsiveContext, Text} from 'grommet';
 
+import defaultMoviePoster from '../static/default-movie-poster.png'
+
 const PosterCard = (props) => {
     let size = useContext(ResponsiveContext)
+
+    let imagePath = props.movie.posterPath
+    let imageUrl = props.movie.posterPath 
+        ? `http://localhost:8080/v1/films/images/poster${imagePath}?size=medium` 
+        : defaultMoviePoster
+
     return (size !== 'large') ? (
     <Box
         flex
@@ -29,7 +37,7 @@ const PosterCard = (props) => {
             fill
             fit="contain"
             alt="movie poster"
-            src={`http://localhost:8080/v1/films/images/poster${props.movie.posterPath}?size=medium`}
+            src={imageUrl}
         ></Image>
         </Box>
         <Heading margin="small" height="auto" width="auto">{props.movie.title}</Heading>
@@ -63,7 +71,7 @@ const PosterCard = (props) => {
         <Image 
             fill
             alt="movie poster"
-            src={`http://localhost:8080/v1/films/images/poster${props.movie.posterPath}?size=medium`}
+            src={imageUrl}
         ></Image>
         </Box>
         <Box 
