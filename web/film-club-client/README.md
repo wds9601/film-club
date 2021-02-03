@@ -35,7 +35,8 @@ I learn a ton every week as we progress through the app and gstro shares tips fo
 
 ## Getting Started
 
-1. Clone and follow directions to start the corresponding **FilmClub** [backend server](https://github.com/gstro/film-club-server) *currently private, refer to [SwaggerHub OpenAPI specs](https://github.com/wds9601/film-club/blob/main/yaml-unresolved/swagger.yaml) for API schema*
+1. Clone and follow directions to start the corresponding **FilmClub** [backend server](https://github.com/gstro/film-club-server)   
+*(currently private, refer to our [OpenAPI specs](https://github.com/wds9601/film-club/blob/main/yaml-unresolved/swagger.yaml) for API schema)*
 2. Navigate to `film-club-client` folder
 3. Clone folder to local machine
 4. In project folder:
