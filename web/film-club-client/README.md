@@ -22,23 +22,19 @@ FilmClub is a cinematic discovery app.  Using [TheMovieDB API](https://developer
 
 
 ## Why make this?
-I am a recent bootcamp grad developer looking to broaden my experience with different front-end technologies and learn team-development practices with industry professionals as I hunt for a job.  This project allowed me to join forces with [gstro](https://github.com/gstro) who took on building out the backend.  
+As a front end developer, I enjoy utilizing playing with new technologies to keep learning about software development.  This project allowed me to join forces with [gstro](https://github.com/gstro) who took on building out the backend.  
 
-I learn a ton every week as we progress through the app and gstro shares tips for better development.  Here are some of the things I have learned/had exposure to so far:
-
-- Github's amazing project management tools
-- Properly using Git branching and PR's for descriptive project history
-- Using a proxy to get around CORS issues in development
-- Learning to use a new design framework with Grommet
-- Learn how to use SwaggerHub/OpenAPI collaboration tools
+These were the new tools I used developing FilmClub:
+- [Grommet](https://v2.grommet.io/) - a popular UI library.  
+- [SwaggerHub/OpenAPI](https://swagger.io/resources/open-api/) collaboration tool
 
 
 ## Getting Started
 
 1. Clone and follow directions to start the corresponding **FilmClub** [backend server](https://github.com/gstro/film-club-server)   
 *(currently private, refer to our [OpenAPI specs](https://github.com/wds9601/film-club/blob/main/yaml-unresolved/swagger.yaml) for API schema)*
+3. Clone this repo to local machine
 2. Navigate to `film-club-client` folder
-3. Clone folder to local machine
 4. In project folder:
 - run `npm install` to install dependencies from `package.json`
 - run `npm start` to begin development server on `localhost:3000`

@@ -74,15 +74,10 @@ function App() {
   // Get first batch of film data
   const getUpcomingMovies = async () => {
     const page = (movies.length / 20) + 1
-    console.log(`getUpcomingMovies called for page: ${page}`)
     const response = await fetch(`/films/upcoming?page=${page}`)
     const data = await response.json()
     setMovies(movies.concat(data.films))
   }
-
-  // useEffect(() => {
-  //   getUpcomingMovies()
-  //   }, [])
 
   return (
     <Grommet theme={customBreakpoints} full>
