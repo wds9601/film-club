@@ -1,5 +1,7 @@
 import React from 'react'
-import { Box } from 'grommet'
+import {Link} from 'react-router-dom'
+import { Box, Button, Heading } from 'grommet'
+import { Search } from 'grommet-icons'
 
 
 const Header = (props) => (
@@ -17,7 +19,13 @@ const Header = (props) => (
             position: 'fixed'
         }}
         {...props}
-        />
+        >
+            {/* <Button icon={<Menu />} onClick={() => setShowSidebar(!showSidebar)} /> */}
+            <Link to={"/"}>
+                <Heading level="1" margin='none'>FilmClub</Heading>
+            </Link>
+            <Button icon={<Search />} />
+        </Box>
     )
 
 export default Header

@@ -74,9 +74,7 @@ function Home(props) {
         <Grommet theme={customBreakpoints} full>
                 <Box background="dark-1">
                 <Header>
-                    {/* <Button icon={<Menu />} onClick={() => setShowSidebar(!showSidebar)} /> */}
-                    <Heading level="1" margin='none'>FilmClub</Heading>
-                    <Button icon={<Search />} />
+                    
                 </Header>
                 <Box height="auto" margin={{"top": "xlarge"}}>
                     <Responsive gap="medium" margin="xlarge" >
