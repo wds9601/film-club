@@ -10,8 +10,8 @@ const Header = (props) => (
         align="center"
         justify="between"
         background="accent-4"
-        pad={{"horizontal": "medium", vertical: 'medium'}}
-        margin={{bottom: 'large'}}
+        pad={{horizontal: "medium", vertical: 'medium'}}
+        margin={{bottom: 'xsmall'}}
         style={{ 
             zIndex: '1',
             position: 'fixed'

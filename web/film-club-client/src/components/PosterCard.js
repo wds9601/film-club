@@ -1,102 +1,88 @@
-import React, { useContext } from 'react';
-import { Anchor, Box, Image, Heading, ResponsiveContext, Text} from 'grommet';
+import React from 'react';
+import { Box, Button, Image, Text} from 'grommet';
 import { List, StatusGood } from 'grommet-icons';
 
 import defaultMoviePoster from '../static/default-movie-poster.png';
 
 const PosterCard = (props) => {
-    let size = useContext(ResponsiveContext)
 
     let imagePath = props.movie.posterPath
     let imageUrl = props.movie.posterPath 
         ? `http://localhost:8080/v1/films/images/poster${imagePath}?size=medium` 
         : defaultMoviePoster
 
-    return (size !== 'large') ? (
-    <Box
-        flex
-        direction="column"
-        pad="small"
-        align="center"
-        round="medium"
-        background="#3b3b3b"
-        onClick={()=>console.log('clicked a card')}
-        margin={{bottom: "large"}}
-    >
-        <Box fill>
-            <Image
-                alt="movie poster"
-                src={imageUrl}
-            />
-        </Box>
-        <Box display="flex" direction="row" align="center" justify="between" width="100%">
-            <Box display="flex" direction="column" justify="center">
-                <Box>
-                    <Heading level="2">{props.movie.title}</Heading>
-                </Box>
-                <Box>
-                    <Heading level="4">{props.movie.releaseDate}</Heading>
-                </Box>
-            </Box>
-            <Box>
-                <Anchor onClick={()=> console.log('You clicked the Add to List button')} hoverIndicator={{color: "accent-2"}}>
-                    <List
-                        size="large"
-                        color="accent-4"
-                    />
-                </Anchor>
-            </Box>
-        </Box>
-    </Box>
-    )
-    : (
-    <Box
+    return (
+        <Box
         flex
         direction="column"
         pad="xsmall"
-        width="medium"
         justify="center"
         round="xsmall"
-        height="auto"
-        background="#3b3b3b"
-    >
-        <Box onClick={()=>console.log('clicked a card')}>
-            <Image 
+        background="dark-2"
+        onClick={() => props.setFilm(props.movie)}
+        hoverIndicator={true}
+        focusIndicator={false}>
+            <Box 
+            fill
+            round="xsmall" 
+            overflow="hidden">
+                <Image
+                fill
+                background="contain"
                 alt="movie poster"
-                src={imageUrl}
-            >
-            </Image>
-        </Box>
-        <Box
+                src={imageUrl}>
+                </Image>
+            </Box>
+            <Box
             display="flex"
             direction="row"
             justify="between"
             width="100%"
-            pad="small"
-        >
-            <Box>
-                <Heading 
-                    responsive={true} 
-                    textAlign="" 
-                    level="3" 
-                    size="medium" 
-                    margin="none"
-                >
-                    {props.movie.title}
-                </Heading>
-                <Text >{props.movie.releaseDate}</Text>
-            </Box>
-            <Box>
-                <Anchor onClick={()=> console.log('You clicked the Add to List button')} hoverIndicator={{color: "accent-2"}}>
-                    <List
-                        size="large"
-                        color="accent-4"
-                    />
-                </Anchor>
+            height={{ "min":"2.6em", "max":"3em" }}
+            pad={{ "horizontal": "xsmall" }}>
+                <Box 
+                display="flex" 
+                direction="column" 
+                justify="between"
+                margin={{
+                    "right":"small",
+                    "top":"0"
+                    }}>
+                    <Text
+                    weight="bold"
+                    size="large"
+                    truncate={true}>
+                        {props.movie.title}
+                    </Text >
+                    <Text 
+                    size="small"
+                    weight="bold">
+                        {props.movie.releaseDate}
+                    </Text>
+                </Box>
+                <Box 
+                display="flex" 
+                direction="row" 
+                width={{ "min":"5em" }} 
+                justify="around" 
+                align="end">
+                    <Button 
+                    onClick={() => console.log("You clicked the Add to MyList icon")}
+                    focusIndicator={false}
+                    >
+                        <List
+                        size="30em"
+                        color="accent-4"/>
+                    </Button>
+                    <Button onClick={() => console.log("You clicked the Ive Seen This icon")}>
+                        <StatusGood
+                        size="30em"
+                        color="accent-4"/>
+                    </Button>
+                </Box>
             </Box>
         </Box>
-    </Box>
-    )
+        )
 }
 
 export default PosterCard;
