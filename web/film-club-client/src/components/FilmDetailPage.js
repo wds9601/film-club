@@ -23,14 +23,11 @@ const FilmDetailPage = (props) => {
                 justify="around"
                 align="center"
                 background="dark-2"
-                pad={{"top":"8em", "horizontal":"5em"}}
+                pad={{"vertical":"6em", "horizontal":"5em"}}
                 height="auto"
                 >
                     <Box 
-                    fit
-                    // fill
                     pad="small"
-                    margin="medium"
                     >
                         <Image src={`http://localhost:8080/v1/films/images/poster${props.film.posterPath}?size=medium`}></Image>
                     </Box>

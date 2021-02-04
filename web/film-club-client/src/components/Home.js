@@ -73,9 +73,7 @@ function Home(props) {
     return (
         <Grommet theme={customBreakpoints} full>
                 <Box background="dark-1">
-                <Header>
-                    
-                </Header>
+                <Header />
                 <Box height="auto" margin={{"top": "xlarge"}}>
                     <Responsive gap="medium" margin="xlarge" >
                         <InfiniteScroll items={props.movies} step={20} onMore={props.getUpcomingMovies}>

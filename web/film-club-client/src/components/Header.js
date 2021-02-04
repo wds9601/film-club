@@ -12,7 +12,7 @@ const Header = (props) => (
         align="center"
         justify="between"
         background="accent-4"
-        pad={{horizontal: "medium", vertical: 'medium'}}
+        pad={{horizontal: "medium", vertical: 'small'}}
         margin={{bottom: 'xsmall'}}
         style={{ 
             zIndex: '1',
