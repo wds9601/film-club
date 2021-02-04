@@ -28,7 +28,7 @@ global: {
 
 // Grid Column Layout
 const columns = {
-small: ['auto'],
+small: ['100%'],
 medium: ['50%', '50%'],
 large: ['33%', '33%', '33%'],
 }
@@ -80,13 +80,13 @@ function Home(props) {
                 </Header>
                 <Box height="auto" margin={{"top": "xlarge"}}>
                     <Responsive gap="medium" margin="xlarge" >
-                    <InfiniteScroll items={props.movies} step={20} onMore={props.getUpcomingMovies}>
-                        {(movie, index) => (
-                        <Link to={`/detail/${index}`} key={index}>
-                            <PosterCard setFilm={props.setFilm} movie={movie} key={index} />
-                        </Link>
-                        )}
-                    </InfiniteScroll>
+                        <InfiniteScroll items={props.movies} step={20} onMore={props.getUpcomingMovies}>
+                            {(movie, index) => (
+                            <Link to={`/detail/${index}`} key={index}>
+                                <PosterCard setFilm={props.setFilm} movie={movie} key={index} />
+                            </Link>
+                            )}
+                        </InfiniteScroll>
                     </Responsive>
                 </Box>
                 </Box>
