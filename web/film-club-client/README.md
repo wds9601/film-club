@@ -1,6 +1,6 @@
 # FilmClub
 
-*screen shot coming soon!*
+![film club home page](https://i.imgur.com/P9q8Iy1.png)
 
 ## What is FilmClub?
 FilmClub is a cinematic discovery app.  Using [TheMovieDB API](https://developers.themoviedb.org/3/getting-started/introduction) FilmClub offers all the newest movie trailers in a simple browsing format, so you quickly get to the important stuff - the cinema! 
