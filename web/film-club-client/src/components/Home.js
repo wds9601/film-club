@@ -30,7 +30,7 @@ global: {
 const columns = {
 small: ['100%'],
 medium: ['50%', '50%'],
-large: ['33%', '33%', '33%'],
+large: ['23.5%', '23.5%', '23.5%', '23.5%'],
 }
 
 // Grid Row Layout
@@ -72,20 +72,20 @@ return (
 function Home(props) {
     return (
         <Grommet theme={customBreakpoints} full>
-                <Box background="dark-1">
+            <Box background="dark-1">
                 <Header />
-                <Box height="auto" margin={{"top": "xlarge"}}>
-                    <Responsive gap="medium" margin="xlarge" >
+                <Box height="auto" pad={{top: "large"}} >
+                    <Responsive gap="medium" pad={{vertical: "xlarge", horizontal: "large"}}>
                         <InfiniteScroll items={props.movies} step={20} onMore={props.getUpcomingMovies}>
                             {(movie, index) => (
-                            <Link to={`/detail/${index}`} key={index}>
+                            <Link to={`/detail/${index}`} key={index} style={{textDecoration:"none"}}>
                                 <PosterCard setFilm={props.setFilm} movie={movie} key={index} />
                             </Link>
                             )}
                         </InfiniteScroll>
                     </Responsive>
                 </Box>
-                </Box>
+            </Box>
         </Grommet>
     );
 }

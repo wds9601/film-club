@@ -29,7 +29,10 @@ const FilmDetailPage = (props) => {
                     <Box 
                     pad="small"
                     >
-                        <Image src={`http://localhost:8080/v1/films/images/poster${props.film.posterPath}?size=medium`}></Image>
+                        <Image 
+                            src={`http://localhost:8080/v1/films/images/poster${props.film.posterPath}?size=medium`}
+                            alt={`${props.film.title} poster image`}
+                            ></Image>
                     </Box>
                     <Box>
                         <Heading level="2">{props.film.title}</Heading>

@@ -29,7 +29,7 @@ const PosterCard = (props) => {
                 <Image
                 fill
                 background="contain"
-                alt="movie poster"
+                alt={`${props.movie.title} poster image`}
                 src={imageUrl}>
                 </Image>
             </Box>

@@ -1,7 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import { Box, Button, Heading } from 'grommet'
-import { Search } from 'grommet-icons'
+import { Anchor, Box, Heading } from 'grommet'
 
 
 const Header = (props) => (
@@ -20,11 +19,12 @@ const Header = (props) => (
         }}
         {...props}
         >
-            {/* <Button icon={<Menu />} onClick={() => setShowSidebar(!showSidebar)} /> */}
-            <Link to={"/"}>
-                <Heading level="1" margin='none'>FilmClub</Heading>
+            <Link to='/' style={{textDecoration: 'none'}}>
+                <Anchor path='/' tag='home' color='dark-2'>
+                    <Heading level="1" margin='none'>FilmClub</Heading>
+                </Anchor>
             </Link>
-            <Button icon={<Search />} />
+            
         </Box>
     )
 
