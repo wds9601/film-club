@@ -32,7 +32,7 @@ These were the new tools I used developing FilmClub:
 ## Getting Started
 
 1. Clone and follow directions to start the corresponding **FilmClub** [backend server](https://github.com/gstro/film-club-server)   
-*(currently private, refer to our [OpenAPI specs](https://github.com/wds9601/film-club/blob/main/yaml-unresolved/swagger.yaml) for API schema)*
+*(currently private, refer to our [OpenAPI specs](https://github.com/wds9601/film-club/blob/main/specs/filmclub.yaml) for API schema)*
 3. Clone this repo to local machine
 2. Navigate to `film-club-client` folder
 4. In project folder:
