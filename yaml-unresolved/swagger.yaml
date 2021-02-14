@@ -7,10 +7,8 @@ info:
     name: Repository
     url: 'https://github.com/wds9601/film-club'
 servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/moloprojects/film-club/1.0.0
-  - url: 'http://localhost:8080/v1'
+  - description: local
+    url: 'http://localhost:8080/v1'
 tags:
   - name: echo
     description: Useful for healthchecks and testing connections.
@@ -32,7 +30,7 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        "200":
           description: successful operation
           content:
             text/plain:
@@ -58,7 +56,7 @@ paths:
           schema:
             type: integer
       responses:
-        200:
+        "200":
           description: successful operation
           content:
             application/json:
@@ -88,19 +86,42 @@ paths:
             schema:
               $ref: '#/components/schemas/EchoPerson'
       responses:
-        200:
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/EchoPerson'
-        400:
+        "400":
           description: invalid json payload
           content:
             text/plain:
               schema:
                 type: string
               example: 'No good'
+
+  /films/{id}:
+    get:
+      tags:
+        - film
+      summary: Get film details
+      description: Get the full details for a film from its ID
+      operationId: getFilmDetails
+      parameters:
+        - name: id
+          in: path
+          description: |
+            The ID of the film to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Details of a film
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilmDetail'
 
   /films/upcoming:
     get:
@@ -117,7 +138,7 @@ paths:
             type: integer
             minimum: 1
       responses:
-        200:
+        "200":
           description: List of upcoming films with pagination info
           content:
             application/json:
@@ -165,7 +186,7 @@ paths:
             enum: [small, medium, large, full]
             default: small
       responses:
-        200:
+        "200":
           description: The data for the requested image
           content:
             image/jpeg:
@@ -242,9 +263,11 @@ components:
         popularity:
           type: number
           format: double
+        posterPath:
+          type: string
         releaseDate:
           type: string
-          format: date-time
+          format: date
         title:
           type: string
         voteAverage:
@@ -252,7 +275,7 @@ components:
           format: double
         voteCount:
           type: number
-          format: double
+          format: int32
       example:
         {
           "backdropPath": "/srYya1ZlI97Au4jUYAktDe3avyA.jpg",
@@ -281,6 +304,306 @@ components:
           "voteAverage": 7.1,
           "voteCount": 111
         }
+    FilmDetail:
+      type: object
+      required:
+        - genres
+        - id
+        - originalLanguage
+        - originalTitle
+        - overview
+        - popularity
+        - releaseDate
+        - runtime
+        - status
+        - tagline
+        - title
+        - voteAverage
+        - voteCount
+        - images
+        - videos
+        - credits
+        - similar
+        - watchProviders
+      properties:
+        backdropPath:
+          type: string
+        budget:
+          type: integer
+          format: int64
+        genres:
+          type: array
+          items:
+            $ref: '#/components/schemas/Genre'
+        homepage:
+          type: string
+        id:
+          type: integer
+          format: int64
+        imdbId:
+          type: string
+        originalLanguage:
+          type: string
+        originalTitle:
+          type: string
+        overview:
+          type: string
+        popularity:
+          type: number
+          format: double
+        posterPath:
+          type: string
+        releaseDate:
+          type: string
+          format: date
+        revenue:
+          type: integer
+          format: int64
+        runtime:
+          type: integer
+          format: int32
+        status:
+          type: string
+          enum: [Rumored, Planned, In Production, Post Production, Released, Cancelled]
+        tagline:
+          type: string
+        title:
+          type: string
+        voteAverage:
+          type: number
+          format: double
+        voteCount:
+          type: number
+          format: int32
+        images:
+          type: object
+          required:
+            - backdrops
+            - posters
+          properties:
+            backdrops:
+              type: array
+              items:
+                $ref: '#/components/schemas/Image'
+            posters:
+              type: array
+              items:
+                $ref: '#/components/schemas/Image'
+        videos:
+          type: array
+          items:
+            $ref: '#/components/schemas/Video'
+        similar:
+          type: array
+          items:
+            $ref: '#/components/schemas/Film'
+        watchProviders:
+          type: object
+          required:
+            - link
+          properties:
+            link:
+              type: string
+            buy:
+              type: array
+              items:
+                $ref: '#/components/schemas/WatchProvider'
+            rent:
+              type: array
+              items:
+                $ref: '#/components/schemas/WatchProvider'
+            flatrate:
+              type: array
+              items:
+                $ref: '#/components/schemas/WatchProvider'
+      example:
+        {
+          "backdropPath": "/52AfXWuXCHn3UjD17rBruA9f5qb.jpg",
+          "genres": [
+            {
+              "id": 18,
+              "name": "Drama"
+            }
+          ],
+          "homepage": "http://www.foxmovies.com/movies/fight-club",
+          "id": 550,
+          "imdbId": "tt0137523",
+          "originalLanguage": "en",
+          "originalTitle": "Fight Club",
+          "overview": "A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground \"fight clubs\" forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion.",
+          "popularity": 43.739,
+          "posterPath": "/8kNruSfhk5IoE4eZOc4UpvDn6tq.jpg",
+          "releaseDate": "1999-10-15",
+          "revenue": 100853753,
+          "runtime": 139,
+          "status": "Released",
+          "tagline": "Mischief. Mayhem. Soap.",
+          "title": "Fight Club",
+          "voteAverage": 8.4,
+          "voteCount": 21078,
+          "images": {
+            "backdrops": [
+              {
+                "aspectRatio": 1.77777777777778,
+                "filePath": "/fCayJrkfRaCRCTh8GqN30f8oyQF.jpg",
+                "height": 720,
+                "iso_639_1": null,
+                "voteAverage": 0,
+                "voteCount": 0,
+                "width": 1280
+              }
+            ],
+            "posters": [
+              {
+                "aspect_ratio": 0.666666666666667,
+                "file_path": "/fpemzjF623QVTe98pCVlwwtFC5N.jpg",
+                "height": 1800,
+                "iso_639_1": "en",
+                "voteAverage": 0,
+                "voteCount": 0,
+                "width": 1200
+              }
+            ]
+          },
+          "videos": [
+            {
+              "id": "5e382d1b4ca676001453826d",
+              "iso_639_1": "en",
+              "iso_3166_1": "US",
+              "key": "6JnN1DmbqoU",
+              "name": "Fight Club - Theatrical Trailer Remastered in HD",
+              "site": "YouTube",
+              "size": 1080,
+              "type": "Trailer",
+              "url": "https://www.youtube.com/watch?v=6JnN1DmbqoU"
+            }
+          ],
+          "credits": {
+            "cast": [
+              {
+                "id": 819,
+                "name": "Edward Norton",
+                "originalName": "Edward Norton",
+                "popularity": 12.408,
+                "profilePath": "/5XBzD5WuTyVQZeS4VI25z2moMeY.jpg",
+                "character": "The Narrator",
+                "creditId": "52fe4250c3a36847f80149f3",
+                "order": 0
+              },
+              {
+                "id": 287,
+                "name": "Brad Pitt",
+                "originalName": "Brad Pitt",
+                "popularity": 20.801,
+                "profilePath": "/ajNaPmXVVMJFg9GWmu6MJzTaXdV.jpg",
+                "character": "Tyler Durden",
+                "creditId": "52fe4250c3a36847f80149f7",
+                "order": 1
+              },
+            ],
+            "crew": [
+              {
+                "id": 376,
+                "name": "Arnon Milchan",
+                "originalName": "Arnon Milchan",
+                "popularity": 2.232,
+                "profilePath": "/b2hBExX4NnczNAnLuTBF4kmNhZm.jpg",
+                "creditId": "55731b8192514111610027d7",
+                "department": "Production",
+                "job": "Executive Producer"
+              },
+              {
+                "id": 605,
+                "name": "Michael Kaplan",
+                "originalName": "Michael Kaplan",
+                "popularity": 0.98,
+                "profilePath": null,
+                "creditId": "5894c4eac3a3685ec6000218",
+                "department": "Costume & Make-Up",
+                "job": "Costume Design"
+              }
+            ]
+          },
+          "similar": [
+            {
+              "originalLanguage": "en",
+              "originalTitle": "Blade Runner",
+              "posterPath": "/vfzE3pjE5G7G7kcZWrA3fnbZo7V.jpg",
+              "voteAverage": 7.9,
+              "overview": "In the smog-choked dystopian Los Angeles of 2019, blade runner Rick Deckard is called out of retirement to terminate a quartet of replicants who have escaped to Earth seeking their creator for a way to extend their short life spans.",
+              "releaseDate": "1982-06-25",
+              "voteCount": 10027,
+              "title": "Blade Runner",
+              "backdropPath": "/eIi3klFf7mp3oL5EEF4mLIDs26r.jpg",
+              "id": 78,
+              "genres": [
+                {
+                  "id": 18,
+                  "name": "Drama"
+                }
+              ],
+              "popularity": 36.442
+            },
+            {
+              "backdropPath": "/kf0Cyf6nqWlbuqlyhUQg8ipy9sn.jpg",
+              "genres": [
+                {
+                  "id": 18,
+                  "name": "Drama"
+                }
+              ],
+              "originalLanguage": "en",
+              "originalTitle": "The Giver",
+              "posterPath": "/5Nypc2LbLxAdqvhj0dCDivxiR7E.jpg",
+              "id": 227156,
+              "voteCount": 3711,
+              "overview": "In a seemingly perfect community, without war, pain, suffering, differences or choice, a young boy is chosen to learn from an elderly man about the true pain and pleasure of the \"real\" world.",
+              "releaseDate": "2014-08-11",
+              "voteAverage": 6.5,
+              "title": "The Giver",
+              "popularity": 20.529
+            }
+          ],
+          "watchProviders": {
+            "link": "https://www.themoviedb.org/movie/550-fight-club/watch?locale=US",
+            "buy": [
+              {
+                "displayPriority": 2,
+                "logoPath": "/q6tl6Ib6X5FT80RMlcDbexIo4St.jpg",
+                "providerId": 2,
+                "providerName": "Apple iTunes"
+              },
+              {
+                "displayPriority": 3,
+                "logoPath": "/p3Z12gKq2qvJaUOMeKNU2mzKVI9.jpg",
+                "providerId": 3,
+                "providerName": "Google Play Movies"
+              }
+            ],
+            "rent": [
+              {
+                "displayPriority": 2,
+                "logoPath": "/q6tl6Ib6X5FT80RMlcDbexIo4St.jpg",
+                "providerId": 2,
+                "providerName": "Apple iTunes"
+              },
+              {
+                "displayPriority": 3,
+                "logoPath": "/p3Z12gKq2qvJaUOMeKNU2mzKVI9.jpg",
+                "providerId": 3,
+                "providerName": "Google Play Movies"
+              }
+            ],
+            "flatrate": [
+              {
+                "displayPriority": 4,
+                "logoPath": "/2slPVV21kaPDx0NwjVtcUjdvzXz.jpg",
+                "providerId": 31,
+                "providerName": "HBO Go"
+              }
+            ]
+          }
+        }
     Genre:
       type: object
       required:
@@ -291,4 +614,105 @@ components:
           type: integer
           format: int64
         name:
+          type: string
+    Image:
+      type: object
+      required:
+        - aspectRatio
+        - filePath
+        - height
+        - voteAverage
+        - voteCount
+        - width
+      properties:
+        aspectRatio:
+          type: number
+          format: double
+        filePath:
+          type: string
+        height:
+          type: integer
+          format: int32
+        iso_639_1:
+          type: string
+        voteAverage:
+          type: number
+          format: double
+        voteCount:
+          type: number
+          format: int32
+        width:
+          type: integer
+          format: int32
+      example:
+        {
+          "aspect_ratio": 0.666666666666667,
+          "file_path": "/fpemzjF623QVTe98pCVlwwtFC5N.jpg",
+          "height": 1800,
+          "iso_639_1": "en",
+          "voteAverage": 0,
+          "voteCount": 0,
+          "width": 1200
+        }
+    Video:
+      type: object
+      required:
+        - id
+        - key
+        - name
+        - site
+        - size
+        - type
+        - url
+      properties:
+        id:
+          type: string
+        iso_639_1:
+          type: string
+        iso_3166_1:
+          type: string
+        key:
+          type: string
+        name:
+          type: string
+        site:
+          type: string
+        size:
+          type: integer
+          format: int32
+        type:
+          type: string
+          enum: [Trailer, Teaser, Clip, Featurette, Behind the Scenes, Bloopers]
+        url:
+          type: strin
+          format: uri
+      example:
+        {
+          "id": "533ec654c3a36854480003eb",
+          "iso_639_1": "en",
+          "iso_3166_1": "US",
+          "key": "SUXWAEX2jlg",
+          "name": "Trailer 1",
+          "site": "YouTube",
+          "size": 720,
+          "type": "Trailer",
+          "url": "https://www.youtube.com/watch?v=SUXWAEX2jlg"
+        }
+    WatchProvider:
+      type: object
+      required:
+        - displayPriority
+        - logoPath
+        - providerId
+        - providerName
+      properties:
+        displayPriority:
+          type: integer
+          format: int32
+        logoPath:
+          type: string
+        providerId:
+          type: integer
+          format: int32
+        providerName:
           type: string
