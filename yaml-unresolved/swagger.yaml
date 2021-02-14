@@ -39,7 +39,7 @@ paths:
               examples:
                 Bob:
                   value: 'Hello, Bob!'
-  /echo/int/{n}:
+  /echo/int/{num}:
     get:
       tags:
         - echo
@@ -49,7 +49,7 @@ paths:
         testing the database connection and json responses.
       operationId: echoNumber
       parameters: 
-        - name: n
+        - name: num
           in: path
           description: Any whole number
           required: true
@@ -314,9 +314,7 @@ components:
         - overview
         - popularity
         - releaseDate
-        - runtime
         - status
-        - tagline
         - title
         - voteAverage
         - voteCount
@@ -376,23 +374,13 @@ components:
           type: number
           format: int32
         images:
-          type: object
-          required:
-            - backdrops
-            - posters
-          properties:
-            backdrops:
-              type: array
-              items:
-                $ref: '#/components/schemas/Image'
-            posters:
-              type: array
-              items:
-                $ref: '#/components/schemas/Image'
+          $ref: '#/components/schemas/Images'
         videos:
           type: array
           items:
             $ref: '#/components/schemas/Video'
+        credits:
+          $ref: '#/components/schemas/Credits'
         similar:
           type: array
           items:
@@ -654,6 +642,20 @@ components:
           "voteCount": 0,
           "width": 1200
         }
+    Images:
+      type: object
+      required:
+        - backdrops
+        - posters
+      properties:
+        backdrops:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+        posters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
     Video:
       type: object
       required:
@@ -679,12 +681,12 @@ components:
           type: string
         size:
           type: integer
-          format: int32
+          enum: [360, 480, 720, 1080]
         type:
           type: string
           enum: [Trailer, Teaser, Clip, Featurette, Behind the Scenes, Bloopers]
         url:
-          type: strin
+          type: string
           format: uri
       example:
         {
@@ -715,4 +717,77 @@ components:
           type: integer
           format: int32
         providerName:
+          type: string
+    Credits:
+      type: object
+      required:
+        - cast
+        - crew
+      properties:
+        cast:
+          type: array
+          items:
+            $ref: '#/components/schemas/CastMember'
+        crew:
+          type: array
+          items:
+            $ref: '#/components/schemas/CrewMember'
+    CastMember:
+      type: object
+      required:
+        - id
+        - name
+        - originalName
+        - popularity
+        - character
+        - creditId
+        - order
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        originalName:
+          type: string
+        popularity:
+          type: number
+          format: double
+        profilePath:
+          type: string
+        character:
+          type: string
+        creditId:
+          type: string
+        order:
+          type: integer
+          format: int32
+    CrewMember:
+      type: object
+      required:
+        - id
+        - name
+        - originalName
+        - popularity
+        - creditId
+        - department
+        - job
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        originalName:
+          type: string
+        popularity:
+          type: number
+          format: double
+        profilePath:
+          type: string
+        creditId:
+          type: string
+        department:
+          type: string
+        job:
           type: string
