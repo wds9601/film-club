@@ -1,100 +1,90 @@
-import React, { useContext } from 'react';
-import { Box, Image, Heading, ResponsiveContext, Text} from 'grommet';
+import React from 'react';
+import { Box, Button, Image, Text} from 'grommet';
+import { List, StatusGood } from 'grommet-icons';
 
-import defaultMoviePoster from '../static/default-movie-poster.png'
+import defaultMoviePoster from '../static/default-movie-poster.png';
 
 const PosterCard = (props) => {
-    let size = useContext(ResponsiveContext)
 
-    let imagePath = props.movie.posterPath
-    let imageUrl = props.movie.posterPath 
+    let { id, posterPath, releaseDate, title } = props.movie
+
+    let imagePath = posterPath
+    let imageUrl = posterPath 
         ? `http://localhost:8080/v1/films/images/poster${imagePath}?size=medium` 
         : defaultMoviePoster
 
-    return (size !== 'large') ? (
-    <Box
+    return (
+        <Box
         flex
         direction="column"
-        pad="small"
-        align="center"
-        justify="around"
-        round="medium"
-        width="auto"
-        height="auto"
-        background="#3b3b3b"
-        elevation="large"
-        onClick={()=>console.log('clicked a card')}
-        margin={{bottom: "large"}}
-    
-    >
-        <Box
-        height="medium"
-        width="auto"
-        round="small"
-        overflow="hidden"
-        >
-        <Image 
+        pad="xsmall"
+        justify="between"
+        round="xsmall"
+        height={{ "min": "100%" }}
+        background="dark-2"
+        onClick={() => props.setMovieId(props.movie)}
+        hoverIndicator={true}
+        focusIndicator={false}>
+            <Box 
             fill
-            fit="contain"
-            alt="movie poster"
-            src={imageUrl}
-        ></Image>
+            round="xsmall" 
+            overflow="hidden">
+                <Image
+                background="cover"
+                alt={`${title} poster image`}
+                src={imageUrl}>
+                </Image>
+            </Box>
+            <Box
+            display="flex"
+            direction="row"
+            justify="between"
+            width="100%"
+            height={{ "min":"2.6em", "max":"3em" }}
+            pad={{ "horizontal": "xsmall" }}>
+                <Box 
+                display="flex" 
+                direction="column" 
+                justify="between"
+                margin={{
+                    "right":"small",
+                    "top":"0"
+                    }}>
+                    <Text
+                    weight="bold"
+                    size="large"
+                    truncate={true}>
+                        {title}
+                    </Text >
+                    <Text 
+                    size="small"
+                    weight="bold">
+                        {releaseDate}
+                    </Text>
+                </Box>
+                <Box 
+                display="flex" 
+                direction="row" 
+                width={{ "min":"5em" }} 
+                justify="around" 
+                align="end">
+                    <Button 
+                    onClick={() => console.log("You clicked the Add to MyList icon")}
+                    focusIndicator={false}
+                    >
+                        <List
+                        size="30em"
+                        color="accent-4"/>
+                    </Button>
+                    <Button onClick={() => console.log("You clicked the Ive Seen This icon")}>
+                        <StatusGood
+                        size="30em"
+                        color="accent-4"/>
+                    </Button>
+                </Box>
+            </Box>
         </Box>
-        <Heading margin="small" height="auto" width="auto">{props.movie.title}</Heading>
-        <Text>{props.movie.year}</Text>
-    </Box>
-    )
-    : (
-    <Box
-        flex
-        direction="row"
-        pad="small"
-        align="center"
-        round="medium"
-        width="auto"
-        height="auto"
-        background="#3b3b3b"
-        elevation="large"
-        onClick={()=>console.log('clicked a card')}
-        margin={{bottom: "large"}}
-    
-    >
-        <Box
-        height="100%"
-        width="50%"
-        round="small"
-        overflow="hidden"
-        margin={{
-            "right": "small"
-        }}
-        >
-        <Image 
-            fill
-            alt="movie poster"
-            src={imageUrl}
-        ></Image>
-        </Box>
-        <Box 
-        display="flex" 
-        direction="column" 
-        flex-wrap="wrap" 
-        height="90%" 
-        width="100%" 
-        justify="around" 
-        align="center"
-        border={{
-            "color": "accent-4",
-            "side": "left",
-            "size": "medium",
-            "style": "solid"
-        }}
-        pad="small"
-        >
-        <Heading responsive={true} textAlign="center" level="2" size="medium" margin="none">{props.movie.title}</Heading>
-        <Text>{props.movie.releaseDate}</Text>
-        </Box>
-    </Box>
-    )
+        )
 }
 
 export default PosterCard;
