@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button, Image, Text} from 'grommet';
-import { List, StatusGood } from 'grommet-icons';
+import { Add, Play } from 'grommet-icons';
 
 import defaultMoviePoster from '../static/default-movie-poster.png';
 
@@ -72,12 +72,12 @@ const PosterCard = (props) => {
                     onClick={() => console.log("You clicked the Add to MyList icon")}
                     focusIndicator={false}
                     >
-                        <List
+                        <Add
                         size="30em"
                         color="accent-4"/>
                     </Button>
                     <Button onClick={() => console.log("You clicked the Ive Seen This icon")}>
-                        <StatusGood
+                        <Play
                         size="30em"
                         color="accent-4"/>
                     </Button>
