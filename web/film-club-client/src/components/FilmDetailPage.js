@@ -9,13 +9,22 @@ const FilmDetailPage = (props) => {
 
     // React Router URL Parameter object
     let { id } = useParams();
-    console.log(id)
-    console.log(props.film.posterPath)
+
+    // const getMovieDetails = async (id) => {
+    //     const response = await fetch(`http://localhost:8080/v1/films/${id}`)
+    //     const data = await response
+    //     // props.setMovieId(data)
+    //     console.log(data)
+    // }
+
+    // getMovieDetails(id)
+
+    let { posterPath, title, overview } = props.movieId
 
     return (
         <Box>
             <Header />
-            { props.film.id
+            { id
                 ?   
                 <Box 
                 display="flex"
@@ -30,14 +39,14 @@ const FilmDetailPage = (props) => {
                     pad="small"
                     >
                         <Image 
-                            src={`http://localhost:8080/v1/films/images/poster${props.film.posterPath}?size=medium`}
-                            alt={`${props.film.title} poster image`}
+                            src={`http://localhost:8080/v1/films/images/poster${posterPath}?size=medium`}
+                            alt={`${title} poster image`}
                             ></Image>
                     </Box>
                     <Box>
-                        <Heading level="2">{props.film.title}</Heading>
+                        <Heading level="2">{title}</Heading>
                         <br/>
-                        <Text>{props.film.overview}</Text>
+                        <Text>{overview}</Text>
                     </Box>
                 </Box>
                 :   

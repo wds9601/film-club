@@ -28,33 +28,34 @@ global: {
 
 // Grid Column Layout
 const columns = {
-small: ['100%'],
-medium: ['50%', '50%'],
-large: ['23.5%', '23.5%', '23.5%', '23.5%'],
+    small: ['100%'],
+    medium: ['50%', '50%'],
+    large: ['23.5%', '23.5%', '23.5%', '23.5%'],
 }
 
 // Grid Row Layout
 const rows = {
-small: ['auto'],
-medium: ['auto'],
-large: ['auto'],
+    small: ['auto'],
+    medium: ['auto'],
+    large: ['auto'],
 }
 
 // Responsive Grid Logic
 const Responsive = ({ children, ...props }) => {
-const size = useContext(ResponsiveContext)
-let rowsVal = rows
-if (rows) {
-    if (rows[size]) {
-    rowsVal = rows[size]
-    }
-}
+    const size = useContext(ResponsiveContext)
 
-let columnsVal = columns
-if (columns) {
-    if (columns[size]) {
-    columnsVal = columns[size]
+    let rowsVal = rows
+    if (rows) {
+        if (rows[size]) {
+        rowsVal = rows[size]
+        }
     }
+
+    let columnsVal = columns
+    if (columns) {
+        if (columns[size]) {
+        columnsVal = columns[size]
+        }
 }
 
 return (
@@ -70,16 +71,26 @@ return (
 
 
 function Home(props) {
+    const [movies, setMovies] = useState([])
+
+    // Get all film data and concat to 'movies' array for Infinite Scroll use
+    const getUpcomingMovies = async () => {
+        const page = (movies.length / 20) + 1
+        const response = await fetch(`/films/upcoming?page=${page}`)
+        const data = await response.json()
+        setMovies(movies.concat(data.films))
+    }
+
     return (
         <Grommet theme={customBreakpoints} full>
             <Box background="dark-1">
                 <Header />
                 <Box height="auto" pad={{top: "large"}} >
                     <Responsive gap="medium" pad={{vertical: "xlarge", horizontal: "large"}}>
-                        <InfiniteScroll items={props.movies} step={20} onMore={props.getUpcomingMovies}>
+                        <InfiniteScroll items={movies} step={20} onMore={getUpcomingMovies}>
                             {(movie, index) => (
                             <Link to={`/detail/${index}`} key={index} style={{textDecoration:"none"}}>
-                                <PosterCard setFilm={props.setFilm} movie={movie} key={index} />
+                                <PosterCard setMovieId={props.setMovieId} movie={movie} key={index} />
                             </Link>
                             )}
                         </InfiniteScroll>

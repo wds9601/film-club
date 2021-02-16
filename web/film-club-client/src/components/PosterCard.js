@@ -6,8 +6,10 @@ import defaultMoviePoster from '../static/default-movie-poster.png';
 
 const PosterCard = (props) => {
 
-    let imagePath = props.movie.posterPath
-    let imageUrl = props.movie.posterPath 
+    let { id, posterPath, releaseDate, title } = props.movie
+
+    let imagePath = posterPath
+    let imageUrl = posterPath 
         ? `http://localhost:8080/v1/films/images/poster${imagePath}?size=medium` 
         : defaultMoviePoster
 
@@ -16,10 +18,11 @@ const PosterCard = (props) => {
         flex
         direction="column"
         pad="xsmall"
-        justify="center"
+        justify="between"
         round="xsmall"
+        height={{ "min": "100%" }}
         background="dark-2"
-        onClick={() => props.setFilm(props.movie)}
+        onClick={() => props.setMovieId(props.movie)}
         hoverIndicator={true}
         focusIndicator={false}>
             <Box 
@@ -27,9 +30,8 @@ const PosterCard = (props) => {
             round="xsmall" 
             overflow="hidden">
                 <Image
-                fill
-                background="contain"
-                alt={`${props.movie.title} poster image`}
+                background="cover"
+                alt={`${title} poster image`}
                 src={imageUrl}>
                 </Image>
             </Box>
@@ -52,12 +54,12 @@ const PosterCard = (props) => {
                     weight="bold"
                     size="large"
                     truncate={true}>
-                        {props.movie.title}
+                        {title}
                     </Text >
                     <Text 
                     size="small"
                     weight="bold">
-                        {props.movie.releaseDate}
+                        {releaseDate}
                     </Text>
                 </Box>
                 <Box 
