@@ -4,8 +4,34 @@ import { Add, Play } from 'grommet-icons';
 
 import defaultMoviePoster from '../static/default-movie-poster.png';
 
-const PosterCard = props => {
+const PosterCard = (props) => {
 	let { id, posterPath, releaseDate, title } = props.movie;
+
+	// Format movie release date for better UX
+	// const formatDate = (releaseDate) => {
+	// 	let today = new Date();
+
+	// 	// if (today.getDate() === )
+	// }
+
+	let formattedDate = releaseDate.replaceAll('-', '.');
+	const releaseDay = formattedDate.substring(8);
+
+	let numReleaseDay = parseInt(releaseDay);
+	let today = new Date().getDate();
+	let tomorrow = today + 1;
+	if (today === numReleaseDay) {
+		formattedDate = 'Today';
+	} else if (tomorrow === numReleaseDay) {
+		formattedDate = 'Tomorrow';
+	}
+
+	let dateOnly = formattedDate.slice();
+
+	console.log('today', today);
+	console.log('day.int.substring', numReleaseDay);
+	console.log('formattedDate', formattedDate);
+	console.log('dateOnly', dateOnly);
 
 	let imagePath = posterPath;
 	let imageUrl = posterPath
@@ -21,7 +47,7 @@ const PosterCard = props => {
 			round="xsmall"
 			height={{ min: '100%' }}
 			background="dark-2"
-			onClick={() => props.setMovieId(props.movie)}
+			onClick={() => props.setMovieId(id)}
 			hoverIndicator={true}
 			focusIndicator={false}
 		>
@@ -43,17 +69,17 @@ const PosterCard = props => {
 				<Box
 					display="flex"
 					direction="column"
-					justify="between"
+					justify="center"
 					margin={{
 						right: 'small',
-						top: '0'
+						top: '0',
 					}}
 				>
-					<Text weight="bold" size="large" truncate={true}>
+					<Text weight="bold" size="med" truncate={true}>
 						{title}
 					</Text>
-					<Text size="small" weight="bold">
-						{releaseDate}
+					<Text size="xsmall" weight="bold">
+						{formattedDate}
 					</Text>
 				</Box>
 				<Box

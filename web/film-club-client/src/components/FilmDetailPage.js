@@ -4,18 +4,18 @@ import { Box, Image, Heading, Text } from 'grommet';
 
 import Header from './Header';
 
-const FilmDetailPage = props => {
+const FilmDetailPage = (props) => {
 	// React Router URL Parameter object
 	let { id } = useParams();
 
-	// const getMovieDetails = async (id) => {
-	//     const response = await fetch(`http://localhost:8080/v1/films/${id}`)
-	//     const data = await response
-	//     // props.setMovieId(data)
-	//     console.log(data)
-	// }
+	const getMovieDetails = async (id) => {
+		const response = await fetch(`http://localhost:8080/v1/films/${id}`);
+		const data = await response.json();
+		// props.setMovieId(data)
+		console.log(data);
+	};
 
-	// getMovieDetails(id)
+	getMovieDetails(id);
 
 	let { posterPath, title, overview } = props.movieId;
 
