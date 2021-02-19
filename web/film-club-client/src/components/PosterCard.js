@@ -21,7 +21,7 @@ const PosterCard = props => {
 			round="xsmall"
 			height={{ min: '100%' }}
 			background="dark-2"
-			onClick={() => props.setMovieId(props.movie)}
+			onClick={() => props.setMovieId(id)}
 			hoverIndicator={true}
 			focusIndicator={false}
 		>

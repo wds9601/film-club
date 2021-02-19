@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Anchor, Box, Heading } from 'grommet';
+import { Button, Box, Heading } from 'grommet';
 
 const Header = props => (
 	<Box
@@ -14,16 +14,17 @@ const Header = props => (
 		margin={{ bottom: 'xsmall' }}
 		style={{
 			zIndex: '1',
-			position: 'fixed'
+			position: 'fixed',
+			top: '0px'
 		}}
 		{...props}
 	>
 		<Link to="/" style={{ textDecoration: 'none' }}>
-			<Anchor path="/" tag="home" color="dark-2">
+			<Button plain={true} focusIndicator={false} color='dark-1'>
 				<Heading level="1" margin="none">
 					FilmClub
 				</Heading>
-			</Anchor>
+			</Button>
 		</Link>
 	</Box>
 );

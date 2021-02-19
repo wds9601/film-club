@@ -1,34 +1,58 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Image, Heading, Text } from 'grommet';
 
 import Header from './Header';
 
-const FilmDetailPage = props => {
+const FilmDetailPage = (props) => {
+	// State object to hold the film details when the fetch is complete
+	const [movieDetails, setMovieDetails] = useState({});
+
 	// React Router URL Parameter object
 	let { id } = useParams();
 
-	// const getMovieDetails = async (id) => {
-	//     const response = await fetch(`http://localhost:8080/v1/films/${id}`)
-	//     const data = await response
-	//     // props.setMovieId(data)
-	//     console.log(data)
-	// }
+	// Use the {id} to fetch details about the corresponding movie
+	const getMovieDetails = async (id) => {
+		const response = await fetch(`http://localhost:8080/v1/films/${id}`);
+		const data = await response.json();
+		setMovieDetails(data);
+		console.log(data);
+	};
 
-	// getMovieDetails(id)
+	// When {id} is assigned call fetch with the id
+	useEffect(() => {
+		getMovieDetails(id);
+	}, [id]);
 
-	let { posterPath, title, overview } = props.movieId;
+	let {
+		backdropPath,
+		credits,
+		images,
+		posterPath,
+		releaseDate,
+		similar,
+		tagline,
+		title,
+		overview,
+		video,
+		watchProviders,
+	} = movieDetails;
 
 	return (
-		<Box>
+		<Box className="page-box"
+			overflow={{
+				"vertical": "scroll"
+			}}
+			display="flex"
+			direction="column"
+			justify="around"
+			background="dark-2"
+			height
+		>
 			<Header />
-			{id ? (
-				<Box
-					display="flex"
-					direction="column"
-					justify="around"
-					align="center"
-					background="dark-2"
+			<Box className="hero-box">
+				<Box className="poster-box"
+					
 					pad={{ vertical: '6em', horizontal: '5em' }}
 					height="auto"
 				>
@@ -38,15 +62,13 @@ const FilmDetailPage = props => {
 							alt={`${title} poster image`}
 						></Image>
 					</Box>
-					<Box>
-						<Heading level="2">{title}</Heading>
-						<br />
-						<Text>{overview}</Text>
-					</Box>
 				</Box>
-			) : (
-				<Heading level="2">Loading..</Heading>
-			)}
+				<Box>
+					<Heading level="2">{title}</Heading>
+					<br />
+					<Text>{overview}</Text>
+				</Box>
+			</Box>
 		</Box>
 	);
 };

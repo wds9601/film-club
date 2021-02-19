@@ -104,7 +104,7 @@ function Home(props) {
 						<InfiniteScroll items={movies} step={20} onMore={getUpcomingMovies}>
 							{(movie, index) => (
 								<Link
-									to={`/detail/${index}`}
+									to={`/detail/${movie.id}`}
 									key={index}
 									style={{ textDecoration: 'none' }}
 								>
