@@ -16,7 +16,7 @@ const FilmDetailPage = () => {
   useEffect(() => {
     // Use the {id} to fetch details about the corresponding movie
     const getMovieDetails = async (id) => {
-      const response = await fetch(`http://localhost:8080/v1/films/${id}`);
+      const response = await fetch(`/films/${id}`);
       const data = await response.json();
       console.log(data);
       setMovieDetails(data);
@@ -36,7 +36,7 @@ const FilmDetailPage = () => {
     videos,
   } = movieDetails;
 
-  if (movieDetails.images) {
+  if (title) {
     return (
       <Box
         className="page-box"
@@ -56,7 +56,6 @@ const FilmDetailPage = () => {
           display="flex"
           direction="row"
           justify="around"
-          // align="center"
           margin={{ top: '4em' }}
         >
           <Box
@@ -66,7 +65,7 @@ const FilmDetailPage = () => {
           >
             <Box>
               <Image
-                src={`http://localhost:8080/v1/films/images/poster${posterPath}?size=large`}
+                src={`/films/images/poster${images.poster[0].file_path}?size=large`}
                 alt={`${title} poster image`}
               />
             </Box>
@@ -95,7 +94,7 @@ const FilmDetailPage = () => {
               >
                 {videos[0] ? (
                   <iframe
-                    title={title}
+                    title={videos.name}
                     width="560"
                     height="315"
                     src={`https://www.youtube.com/embed/${videos[0].key}`}
@@ -165,10 +164,10 @@ const FilmDetailPage = () => {
         </Box>
 
         <Box className="media-box">
-          {images[0] && (
+          {backdropPath && (
             <Box className="images-box">
               <Image
-                src={`http://localhost:8080/v1/films/images/poster${backdropPath}?size=large`}
+                src={`/films/images/poster${backdropPath}?size=large`}
                 alt={`${title} poster image`}
               />
             </Box>

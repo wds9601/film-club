@@ -2,18 +2,12 @@ import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Box,
-  Button,
-  Collapsible,
   Grid,
   Grommet,
-  Heading,
   InfiniteScroll,
-  Layer,
   ResponsiveContext,
-  Sidebar,
   grommet,
 } from 'grommet';
-import { FormClose, Menu, Search } from 'grommet-icons';
 import { deepMerge } from 'grommet/utils';
 
 // Import Custom Components
