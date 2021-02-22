@@ -322,7 +322,6 @@ components:
         - videos
         - credits
         - similar
-        - watchProviders
       properties:
         backdropPath:
           type: string
