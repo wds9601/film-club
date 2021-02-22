@@ -32,7 +32,7 @@ These were the new tools I used developing FilmClub:
 ## Getting Started
 
 1. Clone and follow directions to start the corresponding **FilmClub** [backend server](https://github.com/gstro/film-club-server)   
-*(currently private, refer to our [OpenAPI specs](https://github.com/wds9601/film-club/blob/main/yaml-unresolved/swagger.yaml) for API schema)*
+*(currently private, refer to our [OpenAPI specs](https://github.com/wds9601/film-club/blob/main/specs/filmclub.yaml) for API schema)*
 3. Clone this repo to local machine
 2. Navigate to `film-club-client` folder
 4. In project folder:
@@ -44,4 +44,4 @@ These were the new tools I used developing FilmClub:
 
 Two folders:
   - web: holds all the client side files
-  - yaml unresolved: holds the SwaggerHub YAML file for the FilmClub API.  Serves as a working "contract" between frontend and backend developers and is continuoulsy referenced, and updated through pull requests.
+  - specs: holds the OpenAPI 3.0 YAML file for the FilmClub API specification.  Serves as a working "contract" between frontend and backend developers and is continuoulsy referenced, and updated through pull requests.
