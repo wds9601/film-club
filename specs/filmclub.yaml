@@ -160,11 +160,11 @@ paths:
           required: true
           schema:
             type: string
-            enum: [poster, backdrop]
+            enum: [poster, backdrop, logo, profile, still]
         - name: imagePath
           in: path
           description: |
-            The path for the image to retrieve (e.g. poster or backdrop)
+            The path for the image to retrieve
           required: true
           schema:
             type: string
@@ -175,12 +175,12 @@ paths:
             on the `imageType`. For example, a 'small' _poster_ will request an 
             image with a width of 154 pixels. A 'small' _backdrop_ will request 
             an image with a width of 300 pixels. 
-            |  Size  |  Poster  | Backdrop |
-            |:------:|:--------:|:--------:|
-            |  small |    154   |    300   |
-            | medium |    342   |    780   |
-            |  large |    780   |   1280   |
-            |  full  | original | original |
+            |  Size  |  Poster  | Backdrop |   Logo   |  Still   |  Profile |
+            |:------:|:--------:|:--------:|:--------:|:--------:|:--------:|
+            |  small |    154   |    300   |    92    |     92   |     45   |
+            | medium |    342   |    780   |   185    |    185   |    185   |
+            |  large |    780   |   1280   |   500    |    300   |    632   |
+            |  full  | original | original | original | original | original |
           schema:
             type: string
             enum: [small, medium, large, full]
