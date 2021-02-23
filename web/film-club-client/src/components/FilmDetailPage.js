@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import { Box, Image, Heading, Layer, Text } from 'grommet';
 import { CirclePlay } from 'grommet-icons';
 
+import defaultMoviePoster from '../static/default-movie-poster.png';
+
 import Header from './Header';
 
 const FilmDetailPage = () => {
@@ -30,19 +32,25 @@ const FilmDetailPage = () => {
     genres,
     releaseDate,
     tagline,
-    title,
+		title,
+		posterPath,
     overview,
     videos,
 	} = movieDetails;
-	
-	
-
 
 
   if (images) {
+
+		// Check if movieDetail object has poster image, if it does use the poster image path for fetch
+		// If it doesnt, use the default poster image
+		// if ()
+		// let posterPath = images.posters[0].file_path ? images.posters[0];
+		let posterUrl = posterPath
+			? `/films/images/posters${posterPath}?size=large`
+			: defaultMoviePoster;
 		
 		//  If the movieDetails payload has a videos object, filter for the official trailer
-		let movieTrailer = movieDetails.videos.filter(video => video.type === 'Trailer')[0];
+		let movieTrailer = videos.filter(video => video.type === 'Trailer')[0];
 
     return (
       <Box
@@ -72,7 +80,7 @@ const FilmDetailPage = () => {
           >
             <Box>
               <Image
-                src={`/films/images/poster${images.posters[0].filePath}?size=large`}
+                src={posterUrl}
                 alt={`${title} poster image`}
               />
             </Box>
@@ -177,7 +185,7 @@ const FilmDetailPage = () => {
           {backdropPath && (
             <Box className="images-box">
               <Image
-                src={`/films/images/poster${backdropPath}?size=large`}
+                src={`/films/images/backdrop${backdropPath}?size=large`}
                 alt={`${title} backdrop image`}
               />
             </Box>
