@@ -41,12 +41,11 @@ const FilmDetailPage = () => {
 
   if (images) {
 
-		// Check if movieDetail object has poster image, if it does use the poster image path for fetch
-		// If it doesnt, use the default poster image
-		// if ()
-		// let posterPath = images.posters[0].file_path ? images.posters[0];
+		// Check if movieDetail object has poster image:
+		// if it does - use the poster image path for fetch
+		// If it doesnt - use the default poster image
 		let posterUrl = posterPath
-			? `/films/images/posters${posterPath}?size=large`
+			? `/films/images/poster${posterPath}?size=large`
 			: defaultMoviePoster;
 		
 		//  If the movieDetails payload has a videos object, filter for the official trailer
