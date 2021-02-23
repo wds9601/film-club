@@ -192,11 +192,6 @@ const FilmDetailPage = () => {
           )}
           {videos[0] && <Box className="videos-box"></Box>}
         </Box>
-
-        <Box className="credits-box">
-          <Box className="cast-box"></Box>
-          <Box className="crew-box"></Box>
-        </Box>
       </Box>
     );
   } else {
