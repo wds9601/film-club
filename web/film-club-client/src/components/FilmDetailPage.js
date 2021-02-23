@@ -12,7 +12,7 @@ const FilmDetailPage = () => {
   // React Router URL Parameter object
   const { id } = useParams();
 
-  // // Fetch all movie details with {id} from params, on component load
+  // // Fetch all movie details with {id} from params, on {id} assignment by React Router
   useEffect(() => {
     // Use the {id} to fetch details about the corresponding movie
     const getMovieDetails = async (id) => {
@@ -28,15 +28,22 @@ const FilmDetailPage = () => {
     backdropPath,
     images,
     genres,
-    posterPath,
     releaseDate,
     tagline,
     title,
     overview,
     videos,
-  } = movieDetails;
+	} = movieDetails;
+	
+	
 
-  if (title) {
+
+
+  if (images) {
+		
+		//  If the movieDetails payload has a videos object, filter for the official trailer
+		let movieTrailer = movieDetails.videos.filter(video => video.type === 'Trailer')[0];
+
     return (
       <Box
         className="page-box"
@@ -65,7 +72,7 @@ const FilmDetailPage = () => {
           >
             <Box>
               <Image
-                src={`/films/images/poster${images.poster[0].file_path}?size=large`}
+                src={`/films/images/poster${images.posters[0].filePath}?size=large`}
                 alt={`${title} poster image`}
               />
             </Box>
@@ -92,12 +99,12 @@ const FilmDetailPage = () => {
                 onClickOutside={() => setShowVideo(false)}
                 round="medium"
               >
-                {videos[0] ? (
+                {videos[0]  ? (
                   <iframe
-                    title={videos.name}
+                    title={movieTrailer.name}
                     width="560"
                     height="315"
-                    src={`https://www.youtube.com/embed/${videos[0].key}`}
+                    src={`https://www.youtube.com/embed/${movieTrailer.key}`}
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
@@ -150,7 +157,10 @@ const FilmDetailPage = () => {
                   {title}
                 </Heading>
                 <Text size="0.9em">({releaseDate})</Text>
-                {genres[0] && <Text size="0.9em">({genres[0].name})</Text>}
+                {genres[0] && 
+									<Text size="0.9em">
+										({genres[0].name})
+									</Text>}
               </Box>
               <br />
               {tagline && (
@@ -168,7 +178,7 @@ const FilmDetailPage = () => {
             <Box className="images-box">
               <Image
                 src={`/films/images/poster${backdropPath}?size=large`}
-                alt={`${title} poster image`}
+                alt={`${title} backdrop image`}
               />
             </Box>
           )}
