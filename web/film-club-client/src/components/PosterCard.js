@@ -8,30 +8,28 @@ const PosterCard = (props) => {
 	let { id, posterPath, releaseDate, title } = props.movie;
 
 	// Format movie release date for better UX
-	// const formatDate = (releaseDate) => {
-	// 	let today = new Date();
+	// Set variables for movie release day, month, year
+	const releaseDay = parseInt(releaseDate.substring(8));
+	const releaseYear = parseInt(releaseDate.substring(2,4));
+	const releaseMonth = parseInt(releaseDate.substring(5,7));
 
-	// 	// if (today.getDate() === )
-	// }
+	// Set variables for today's date and format the year to 2 digits
+	let currentDay = new Date().getDate();
+	let currentMonth = new Date().getMonth() + 1; // Offsets default 0-based month system (e.g. Jan = 0, Feb = 1)
+	let currentFullYear = new Date().getFullYear().toString();
+	let currentYear = parseInt(currentFullYear.split('').slice(2).join(''));
 
-	let formattedDate = releaseDate.replaceAll('-', '.');
-	const releaseDay = formattedDate.substring(8);
+	// Set variables for formatted whole dates (dd.mm.yy)
+	let currentDate = `${currentMonth}.${currentDay}.${currentYear}`;
+	let formattedReleaseDate = `${releaseMonth}.${releaseDay}.${releaseYear}`;
 
-	let numReleaseDay = parseInt(releaseDay);
-	let today = new Date().getDate();
-	let tomorrow = today + 1;
-	if (today === numReleaseDay) {
-		formattedDate = 'Today';
-	} else if (tomorrow === numReleaseDay) {
-		formattedDate = 'Tomorrow';
+	// Compare the release date with today and tomorrow's dates and set the correct value/string
+	let tomorrow = `${currentMonth}.${currentDay + 1}.${currentYear}`;;
+	if (currentDate === formattedReleaseDate) {
+		formattedReleaseDate = 'Today';
+	} else if (tomorrow === formattedReleaseDate) {
+		formattedReleaseDate = 'Tomorrow';
 	}
-
-	let dateOnly = formattedDate.slice();
-
-	console.log('today', today);
-	console.log('day.int.substring', numReleaseDay);
-	console.log('formattedDate', formattedDate);
-	console.log('dateOnly', dateOnly);
 
 	let imagePath = posterPath;
 	let imageUrl = posterPath
@@ -79,7 +77,7 @@ const PosterCard = (props) => {
 						{title}
 					</Text>
 					<Text size="xsmall" weight="bold">
-						{formattedDate}
+						{formattedReleaseDate}
 					</Text>
 				</Box>
 				<Box
