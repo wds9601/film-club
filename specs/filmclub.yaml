@@ -1,0 +1,792 @@
+openapi: 3.0.0
+info:
+  title: Film Club
+  version: 1.0.0
+  description: API for the the Film Club site for tracking movies.
+  contact:
+    name: Repository
+    url: 'https://github.com/wds9601/film-club'
+servers:
+  - description: local
+    url: 'http://localhost:8080/v1'
+tags:
+  - name: echo
+    description: Useful for healthchecks and testing connections.
+  - name: film
+    description: Info about a film
+paths:
+  /echo/hello/{name}:
+    get:
+      tags:
+        - echo
+      summary: Echo a name
+      description: Returns a greeting using the supplied name
+      operationId: echoName
+      parameters:
+        - name: name
+          in: path
+          description: Any name
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                Bob:
+                  value: 'Hello, Bob!'
+  /echo/int/{num}:
+    get:
+      tags:
+        - echo
+      summary: Echo an integer
+      description: |
+        Selects the given number from the database, returns json. Useful for
+        testing the database connection and json responses.
+      operationId: echoNumber
+      parameters: 
+        - name: num
+          in: path
+          description: Any whole number
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  selected:
+                    type: integer
+                    format: int32
+              examples:
+                forty-two:
+                  value:
+                    {
+                      "selected": 42
+                    }
+  /echo/person:
+    post:
+      tags:
+        - echo
+      summary: Echo a person type
+      description: Echoes back the same JSON payload if it's considered valid
+      operationId: echoPerson
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EchoPerson'
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EchoPerson'
+        "400":
+          description: invalid json payload
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: 'No good'
+
+  /films/{id}:
+    get:
+      tags:
+        - film
+      summary: Get film details
+      description: Get the full details for a film from its ID
+      operationId: getFilmDetails
+      parameters:
+        - name: id
+          in: path
+          description: |
+            The ID of the film to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Details of a film
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilmDetail'
+
+  /films/upcoming:
+    get:
+      tags:
+        - film
+      summary: Get upcoming films
+      description: Get paginated list of upcoming films
+      operationId: getUpcoming
+      parameters: 
+        - name: page
+          in: query
+          description: The next page of contents to request
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        "200":
+          description: List of upcoming films with pagination info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpcomingFilmsResponse'
+  
+  /films/images/{imageType}/{imagePath}:
+    get:
+      tags:
+        - film
+      summary: Get image for a film
+      description: Retrieve image data related to a film
+      operationId: getFilmImage
+      parameters:
+        - name: imageType
+          in: path
+          description: |
+            The image type to retrieve
+          required: true
+          schema:
+            type: string
+            enum: [poster, backdrop, logo, profile, still]
+        - name: imagePath
+          in: path
+          description: |
+            The path for the image to retrieve
+          required: true
+          schema:
+            type: string
+        - name: size
+          in: query
+          description: |
+            The relative dimensions of the image to retrieve. This will depend 
+            on the `imageType`. For example, a 'small' _poster_ will request an 
+            image with a width of 154 pixels. A 'small' _backdrop_ will request 
+            an image with a width of 300 pixels. 
+            |  Size  |  Poster  | Backdrop |   Logo   |  Still   |  Profile |
+            |:------:|:--------:|:--------:|:--------:|:--------:|:--------:|
+            |  small |    154   |    300   |    92    |     92   |     45   |
+            | medium |    342   |    780   |   185    |    185   |    185   |
+            |  large |    780   |   1280   |   500    |    300   |    632   |
+            |  full  | original | original | original | original | original |
+          schema:
+            type: string
+            enum: [small, medium, large, full]
+            default: small
+      responses:
+        "200":
+          description: The data for the requested image
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+
+components:
+  schemas:
+    EchoPerson:
+      type: object
+      required: 
+        - name
+        - age
+      properties:
+        name:
+          type: string
+        age:
+          type: integer
+          minimum: 1
+      example:
+        {
+          "name": "Jon Snow",
+          "age": 35
+        }
+    UpcomingFilmsResponse:
+      type: object
+      required: 
+        - films
+        - page
+        - totalPages
+        - totalResults
+      properties:
+        films:
+          type: array
+          items:
+            $ref: '#/components/schemas/Film'
+        page:
+          type: integer
+          minimum: 1
+        totalPages:
+          type: integer
+        totalResults:
+          type: integer
+    Film:
+      type: object
+      required:
+        - genres
+        - id
+        - originalLanguage
+        - originalTitle
+        - overview
+        - popularity
+        - releaseDate
+        - title
+        - voteAverage
+        - voteCount
+      properties:
+        backdropPath:
+          type: string
+        genres:
+          type: array
+          items:
+            $ref: '#/components/schemas/Genre'
+        id:
+          type: integer
+          format: int64
+        originalLanguage:
+          type: string
+        originalTitle:
+          type: string
+        overview:
+          type: string
+        popularity:
+          type: number
+          format: double
+        posterPath:
+          type: string
+        releaseDate:
+          type: string
+          format: date
+        title:
+          type: string
+        voteAverage:
+          type: number
+          format: double
+        voteCount:
+          type: number
+          format: int32
+      example:
+        {
+          "backdropPath": "/srYya1ZlI97Au4jUYAktDe3avyA.jpg",
+          "genres": [
+            {
+              "id": 14,
+              "name": "Fantasy"
+            },
+            {
+              "id": 28,
+              "name": "Action"
+            },
+            {
+              "id": 12,
+              "name": "Adventure"
+            }
+          ],
+          "id": 464052,
+          "originalLanguage": "en",
+          "originalTitle": "Wonder Woman 1984",
+          "overview": "Wonder Woman comes into conflict with the Soviet Union during the Cold War in the 1980s and finds a formidable foe by the name of the Cheetah.",
+          "popularity": 974.114,
+          "posterPath": "/di1bCAfGoJ0BzNEavLsPyxQ2AaB.jpg",
+          "releaseDate": "2020-12-25",
+          "title": "Wonder Woman 1984",
+          "voteAverage": 7.1,
+          "voteCount": 111
+        }
+    FilmDetail:
+      type: object
+      required:
+        - genres
+        - id
+        - originalLanguage
+        - originalTitle
+        - overview
+        - popularity
+        - releaseDate
+        - status
+        - title
+        - voteAverage
+        - voteCount
+        - images
+        - videos
+        - credits
+        - similar
+      properties:
+        backdropPath:
+          type: string
+        budget:
+          type: integer
+          format: int64
+        genres:
+          type: array
+          items:
+            $ref: '#/components/schemas/Genre'
+        homepage:
+          type: string
+        id:
+          type: integer
+          format: int64
+        imdbId:
+          type: string
+        originalLanguage:
+          type: string
+        originalTitle:
+          type: string
+        overview:
+          type: string
+        popularity:
+          type: number
+          format: double
+        posterPath:
+          type: string
+        releaseDate:
+          type: string
+          format: date
+        revenue:
+          type: integer
+          format: int64
+        runtime:
+          type: integer
+          format: int32
+        status:
+          type: string
+          enum: [Rumored, Planned, In Production, Post Production, Released, Cancelled]
+        tagline:
+          type: string
+        title:
+          type: string
+        voteAverage:
+          type: number
+          format: double
+        voteCount:
+          type: number
+          format: int32
+        images:
+          $ref: '#/components/schemas/Images'
+        videos:
+          type: array
+          items:
+            $ref: '#/components/schemas/Video'
+        credits:
+          $ref: '#/components/schemas/Credits'
+        similar:
+          type: array
+          items:
+            $ref: '#/components/schemas/Film'
+        watchProviders:
+          type: object
+          required:
+            - link
+          properties:
+            link:
+              type: string
+            buy:
+              type: array
+              items:
+                $ref: '#/components/schemas/WatchProvider'
+            rent:
+              type: array
+              items:
+                $ref: '#/components/schemas/WatchProvider'
+            flatrate:
+              type: array
+              items:
+                $ref: '#/components/schemas/WatchProvider'
+      example:
+        {
+          "backdropPath": "/52AfXWuXCHn3UjD17rBruA9f5qb.jpg",
+          "genres": [
+            {
+              "id": 18,
+              "name": "Drama"
+            }
+          ],
+          "homepage": "http://www.foxmovies.com/movies/fight-club",
+          "id": 550,
+          "imdbId": "tt0137523",
+          "originalLanguage": "en",
+          "originalTitle": "Fight Club",
+          "overview": "A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground \"fight clubs\" forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion.",
+          "popularity": 43.739,
+          "posterPath": "/8kNruSfhk5IoE4eZOc4UpvDn6tq.jpg",
+          "releaseDate": "1999-10-15",
+          "revenue": 100853753,
+          "runtime": 139,
+          "status": "Released",
+          "tagline": "Mischief. Mayhem. Soap.",
+          "title": "Fight Club",
+          "voteAverage": 8.4,
+          "voteCount": 21078,
+          "images": {
+            "backdrops": [
+              {
+                "aspectRatio": 1.77777777777778,
+                "filePath": "/fCayJrkfRaCRCTh8GqN30f8oyQF.jpg",
+                "height": 720,
+                "iso_639_1": null,
+                "voteAverage": 0,
+                "voteCount": 0,
+                "width": 1280
+              }
+            ],
+            "posters": [
+              {
+                "aspect_ratio": 0.666666666666667,
+                "file_path": "/fpemzjF623QVTe98pCVlwwtFC5N.jpg",
+                "height": 1800,
+                "iso_639_1": "en",
+                "voteAverage": 0,
+                "voteCount": 0,
+                "width": 1200
+              }
+            ]
+          },
+          "videos": [
+            {
+              "id": "5e382d1b4ca676001453826d",
+              "iso_639_1": "en",
+              "iso_3166_1": "US",
+              "key": "6JnN1DmbqoU",
+              "name": "Fight Club - Theatrical Trailer Remastered in HD",
+              "site": "YouTube",
+              "size": 1080,
+              "type": "Trailer",
+              "url": "https://www.youtube.com/watch?v=6JnN1DmbqoU"
+            }
+          ],
+          "credits": {
+            "cast": [
+              {
+                "id": 819,
+                "name": "Edward Norton",
+                "originalName": "Edward Norton",
+                "popularity": 12.408,
+                "profilePath": "/5XBzD5WuTyVQZeS4VI25z2moMeY.jpg",
+                "character": "The Narrator",
+                "creditId": "52fe4250c3a36847f80149f3",
+                "order": 0
+              },
+              {
+                "id": 287,
+                "name": "Brad Pitt",
+                "originalName": "Brad Pitt",
+                "popularity": 20.801,
+                "profilePath": "/ajNaPmXVVMJFg9GWmu6MJzTaXdV.jpg",
+                "character": "Tyler Durden",
+                "creditId": "52fe4250c3a36847f80149f7",
+                "order": 1
+              },
+            ],
+            "crew": [
+              {
+                "id": 376,
+                "name": "Arnon Milchan",
+                "originalName": "Arnon Milchan",
+                "popularity": 2.232,
+                "profilePath": "/b2hBExX4NnczNAnLuTBF4kmNhZm.jpg",
+                "creditId": "55731b8192514111610027d7",
+                "department": "Production",
+                "job": "Executive Producer"
+              },
+              {
+                "id": 605,
+                "name": "Michael Kaplan",
+                "originalName": "Michael Kaplan",
+                "popularity": 0.98,
+                "profilePath": null,
+                "creditId": "5894c4eac3a3685ec6000218",
+                "department": "Costume & Make-Up",
+                "job": "Costume Design"
+              }
+            ]
+          },
+          "similar": [
+            {
+              "originalLanguage": "en",
+              "originalTitle": "Blade Runner",
+              "posterPath": "/vfzE3pjE5G7G7kcZWrA3fnbZo7V.jpg",
+              "voteAverage": 7.9,
+              "overview": "In the smog-choked dystopian Los Angeles of 2019, blade runner Rick Deckard is called out of retirement to terminate a quartet of replicants who have escaped to Earth seeking their creator for a way to extend their short life spans.",
+              "releaseDate": "1982-06-25",
+              "voteCount": 10027,
+              "title": "Blade Runner",
+              "backdropPath": "/eIi3klFf7mp3oL5EEF4mLIDs26r.jpg",
+              "id": 78,
+              "genres": [
+                {
+                  "id": 18,
+                  "name": "Drama"
+                }
+              ],
+              "popularity": 36.442
+            },
+            {
+              "backdropPath": "/kf0Cyf6nqWlbuqlyhUQg8ipy9sn.jpg",
+              "genres": [
+                {
+                  "id": 18,
+                  "name": "Drama"
+                }
+              ],
+              "originalLanguage": "en",
+              "originalTitle": "The Giver",
+              "posterPath": "/5Nypc2LbLxAdqvhj0dCDivxiR7E.jpg",
+              "id": 227156,
+              "voteCount": 3711,
+              "overview": "In a seemingly perfect community, without war, pain, suffering, differences or choice, a young boy is chosen to learn from an elderly man about the true pain and pleasure of the \"real\" world.",
+              "releaseDate": "2014-08-11",
+              "voteAverage": 6.5,
+              "title": "The Giver",
+              "popularity": 20.529
+            }
+          ],
+          "watchProviders": {
+            "link": "https://www.themoviedb.org/movie/550-fight-club/watch?locale=US",
+            "buy": [
+              {
+                "displayPriority": 2,
+                "logoPath": "/q6tl6Ib6X5FT80RMlcDbexIo4St.jpg",
+                "providerId": 2,
+                "providerName": "Apple iTunes"
+              },
+              {
+                "displayPriority": 3,
+                "logoPath": "/p3Z12gKq2qvJaUOMeKNU2mzKVI9.jpg",
+                "providerId": 3,
+                "providerName": "Google Play Movies"
+              }
+            ],
+            "rent": [
+              {
+                "displayPriority": 2,
+                "logoPath": "/q6tl6Ib6X5FT80RMlcDbexIo4St.jpg",
+                "providerId": 2,
+                "providerName": "Apple iTunes"
+              },
+              {
+                "displayPriority": 3,
+                "logoPath": "/p3Z12gKq2qvJaUOMeKNU2mzKVI9.jpg",
+                "providerId": 3,
+                "providerName": "Google Play Movies"
+              }
+            ],
+            "flatrate": [
+              {
+                "displayPriority": 4,
+                "logoPath": "/2slPVV21kaPDx0NwjVtcUjdvzXz.jpg",
+                "providerId": 31,
+                "providerName": "HBO Go"
+              }
+            ]
+          }
+        }
+    Genre:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    Image:
+      type: object
+      required:
+        - aspectRatio
+        - filePath
+        - height
+        - voteAverage
+        - voteCount
+        - width
+      properties:
+        aspectRatio:
+          type: number
+          format: double
+        filePath:
+          type: string
+        height:
+          type: integer
+          format: int32
+        iso_639_1:
+          type: string
+        voteAverage:
+          type: number
+          format: double
+        voteCount:
+          type: number
+          format: int32
+        width:
+          type: integer
+          format: int32
+      example:
+        {
+          "aspect_ratio": 0.666666666666667,
+          "file_path": "/fpemzjF623QVTe98pCVlwwtFC5N.jpg",
+          "height": 1800,
+          "iso_639_1": "en",
+          "voteAverage": 0,
+          "voteCount": 0,
+          "width": 1200
+        }
+    Images:
+      type: object
+      required:
+        - backdrops
+        - posters
+      properties:
+        backdrops:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+        posters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+    Video:
+      type: object
+      required:
+        - id
+        - key
+        - name
+        - site
+        - size
+        - type
+        - url
+      properties:
+        id:
+          type: string
+        iso_639_1:
+          type: string
+        iso_3166_1:
+          type: string
+        key:
+          type: string
+        name:
+          type: string
+        site:
+          type: string
+        size:
+          type: integer
+          enum: [360, 480, 720, 1080]
+        type:
+          type: string
+          enum: [Trailer, Teaser, Clip, Featurette, Behind the Scenes, Bloopers]
+        url:
+          type: string
+          format: uri
+      example:
+        {
+          "id": "533ec654c3a36854480003eb",
+          "iso_639_1": "en",
+          "iso_3166_1": "US",
+          "key": "SUXWAEX2jlg",
+          "name": "Trailer 1",
+          "site": "YouTube",
+          "size": 720,
+          "type": "Trailer",
+          "url": "https://www.youtube.com/watch?v=SUXWAEX2jlg"
+        }
+    WatchProvider:
+      type: object
+      required:
+        - displayPriority
+        - logoPath
+        - providerId
+        - providerName
+      properties:
+        displayPriority:
+          type: integer
+          format: int32
+        logoPath:
+          type: string
+        providerId:
+          type: integer
+          format: int32
+        providerName:
+          type: string
+    Credits:
+      type: object
+      required:
+        - cast
+        - crew
+      properties:
+        cast:
+          type: array
+          items:
+            $ref: '#/components/schemas/CastMember'
+        crew:
+          type: array
+          items:
+            $ref: '#/components/schemas/CrewMember'
+    CastMember:
+      type: object
+      required:
+        - id
+        - name
+        - originalName
+        - popularity
+        - character
+        - creditId
+        - order
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        originalName:
+          type: string
+        popularity:
+          type: number
+          format: double
+        profilePath:
+          type: string
+        character:
+          type: string
+        creditId:
+          type: string
+        order:
+          type: integer
+          format: int32
+    CrewMember:
+      type: object
+      required:
+        - id
+        - name
+        - originalName
+        - popularity
+        - creditId
+        - department
+        - job
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        originalName:
+          type: string
+        popularity:
+          type: number
+          format: double
+        profilePath:
+          type: string
+        creditId:
+          type: string
+        department:
+          type: string
+        job:
+          type: string
