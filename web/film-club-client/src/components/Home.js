@@ -85,7 +85,7 @@ function Home(props) {
     const data = await response.json();
     setMovies(movies.concat(data.films));
   };
-
+  
   return (
     <Grommet theme={customBreakpoints} full>
       <Box background="dark-1">
