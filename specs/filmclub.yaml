@@ -240,7 +240,6 @@ components:
         - originalTitle
         - overview
         - popularity
-        - releaseDate
         - title
         - voteAverage
         - voteCount
@@ -313,7 +312,6 @@ components:
         - originalTitle
         - overview
         - popularity
-        - releaseDate
         - status
         - title
         - voteAverage
