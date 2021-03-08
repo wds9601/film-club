@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Image, Heading, Text } from 'grommet';
+import { Box, Image, Heading, Paragraph, Text } from 'grommet';
 import { CirclePlay } from 'grommet-icons';
 
 import defaultMoviePoster from '../static/default-movie-poster.png';
@@ -102,27 +102,47 @@ const FilmDetailPage = () => {
         </Box>
 
         <Box className="info-box">
-          <Box className="title-box">
+          <Box className="text-box" text-align='start'>
             <Heading level="2" margin="0">
               {title}
             </Heading>
-            <Text size="0.9em">{formattedReleaseDate}</Text>
-            {genres[0] && (
-              genres.map(genre => (
-                <Text size="0.9em">
-                  {genre.name}
-                </Text>
-              )))
-            }
+            <Box className="text-header-group">
+              <Text size="0.9em" weight="bold">Release Date:</Text><Text size="0.9em">{formattedReleaseDate}</Text>
+            </Box>
+            <Box className="text-header-group">
+              <Text size="0.9em" weight="bold">Genres:</Text>
+              {genres[0] && (
+                genres.map(genre => (
+                  <Text size="0.9em">
+                    {genre.name}
+                  </Text>
+                )))
+              }
+            </Box>
+            
           </Box>
           <br />
-          <Box className="info-text-box" display="flex" direction="column" >
+          <Box 
+            className="info-text-box" 
+            display="flex" 
+            direction="column" 
+          >
             {tagline && (
-              <Text margin={{ top: 'xsmall', bottom: 'medium' }}>
-                {tagline}
-              </Text>
+              <Box className="text-header-group">
+                <Text size="0.9em" weight="bold">Tagline:</Text>
+                <Paragraph margin={{ top: 'xsmall', bottom: 'medium' }}>
+                  {tagline}
+                </Paragraph>
+              </Box>
             )}
-            <Text>{overview}</Text>
+            {overview && (
+              <Box className="text-header-group">
+                <Text size="0.9em" weight="bold">Overview:</Text>
+                <Paragraph margin={{ top: 'xsmall'}}>
+                  {overview}
+                </Paragraph>
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>
