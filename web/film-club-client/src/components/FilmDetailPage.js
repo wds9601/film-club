@@ -28,6 +28,7 @@ const FilmDetailPage = () => {
 
   let {
     backdropPath,
+    credits,
     images,
     genres,
     overview,
@@ -38,6 +39,7 @@ const FilmDetailPage = () => {
     videos,
   } = movieDetails;
 
+  // Format Release Date for UX
   let formattedReleaseDate;
   if (releaseDate) {
     formattedReleaseDate = new Date(releaseDate);
@@ -64,6 +66,21 @@ const FilmDetailPage = () => {
     //  If the movieDetails payload has a videos object, filter for the official trailer
     let movieTrailer = videos.filter((video) => video.type === 'Trailer')[0];
 
+    // Select top level crew members for display
+    let crewArray = [];
+    if (credits.crew[0]) {
+      credits.crew.forEach((member) => {
+        if (
+          member.job === 'Screenplay' ||
+          member.job === 'Director' ||
+          member.job === 'Novel'
+        ) {
+          crewArray.push(member);
+        }
+      });
+      // console.log(crewArray);
+    }
+
     return (
       <Box
         className="page-box"
@@ -73,7 +90,7 @@ const FilmDetailPage = () => {
         overflow={{
           vertical: 'scroll',
         }}
-        pad={{vertical: "4em", horizontal: "large"}}
+        pad={{ vertical: '4em', horizontal: 'large' }}
       >
         <Header />
 
@@ -129,26 +146,56 @@ const FilmDetailPage = () => {
 
           <Box className="info-box">
             <Box className="all-text-box" text-align="start">
-
-              <Text size="2.5em" weight="bold">
+              <Text size="2.75em" weight="bold">
                 {title}
               </Text>
 
               <Box className="sub-text-box" pad="small">
-                <Box className="text-header-group" direction="row" align="center">
-                  <Text weight="bold" margin={{right: "small"}}>
-                    Release Date:
-                  </Text>
-                  <Text size="0.9em">{formattedReleaseDate}</Text>
+                <Box className="inner-sub-text-box">
+                  <Box
+                    className="text-header-group"
+                    direction="row"
+                    align="center"
+                  >
+                    <Text size="0.9em" weight="bold" margin={{ right: 'xsmall' }}>
+                      RELEASE DATE
+                    </Text>
+                    <Text size="0.9em">{formattedReleaseDate}</Text>
+                  </Box>
+                  <Box
+                    className="text-header-group"
+                    direction="row"
+                    align="start"
+                  >
+                    <Text size="0.9em" weight="bold" margin={{ right: 'xsmall' }}>
+                      GENRES
+                    </Text>
+                    <Box direction="column">
+                      {genres[0] &&
+                        genres.map((genre, id) => (
+                          <Text key={id} size="0.9em">
+                            {genre.name}
+                          </Text>
+                        ))}
+                    </Box>
+                  </Box>
                 </Box>
-                <Box className="text-header-group" direction="row" align="start">
-                  <Text weight="bold" margin={{right: "small"}}>
-                    Genres:
-                  </Text>
-                  <Box direction="column" >
-                    {genres[0] &&
-                      genres.map((genre) =>
-                        <Text size="0.9em">{genre.name}</Text>
+                <Box>
+                  <Box
+                    className="inner-sub-text-box-crew"
+                    direction="row"
+                    wrap={true}
+                    align="start"
+                    margin={{top: "medium"}}
+                    justify="between"
+                  >
+                    {crewArray.map((crew, id) => 
+                    <Box key={id} margin={{ right: 'small' }}>
+                      <Text size="0.9em" weight="bold">
+                        {crew.job}
+                      </Text>
+                      <Text size="0.9em">{crew.name}</Text>
+                    </Box>
                     )}
                   </Box>
                 </Box>
@@ -156,14 +203,19 @@ const FilmDetailPage = () => {
                 <Box className="info-text-box" direction="column">
                   {tagline && (
                     <Box className="text-header-group">
-                      <Text size="0.9em" margin={{ top: 'xsmall', bottom: 'medium' }}>
+                      <Text
+                        size="0.9em"
+                        margin={{ top: 'xsmall', bottom: 'medium' }}
+                      >
                         <em>{tagline}</em>
                       </Text>
                     </Box>
                   )}
                   {overview && (
                     <Box className="text-header-group">
-                      <Text size="0.9em" margin={{ top: 'xsmall' }}>{overview}</Text>
+                      <Text size="0.9em" margin={{ top: 'xsmall' }}>
+                        {overview}
+                      </Text>
                     </Box>
                   )}
                 </Box>
