@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Image, Heading, Paragraph, Text } from 'grommet';
-import { CirclePlay } from 'grommet-icons';
+import { Box, Image, Heading, Paragraph, Text } from 'grommet'; 
 
 import defaultMoviePoster from '../static/default-movie-poster.png';
 
@@ -42,7 +41,15 @@ const FilmDetailPage = () => {
   // Format Release Date for UX
   let formattedReleaseDate;
   if (releaseDate) {
+    // Set as JS Date object
     formattedReleaseDate = new Date(releaseDate);
+    // Offset user timezone difference
+    formattedReleaseDate = new Date(
+      formattedReleaseDate.setMinutes(
+        formattedReleaseDate.getMinutes() +
+          formattedReleaseDate.getTimezoneOffset()
+      )
+    );
     // Format release date display to "MM.DD.YY"
     const day = formattedReleaseDate.getDate();
     const month = formattedReleaseDate.getMonth() + 1;
@@ -157,7 +164,11 @@ const FilmDetailPage = () => {
                     direction="row"
                     align="center"
                   >
-                    <Text size="0.9em" weight="bold" margin={{ right: 'xsmall' }}>
+                    <Text
+                      size="0.9em"
+                      weight="bold"
+                      margin={{ right: 'xsmall' }}
+                    >
                       RELEASE DATE
                     </Text>
                     <Text size="0.9em">{formattedReleaseDate}</Text>
@@ -167,7 +178,11 @@ const FilmDetailPage = () => {
                     direction="row"
                     align="start"
                   >
-                    <Text size="0.9em" weight="bold" margin={{ right: 'xsmall' }}>
+                    <Text
+                      size="0.9em"
+                      weight="bold"
+                      margin={{ right: 'xsmall' }}
+                    >
                       GENRES
                     </Text>
                     <Box direction="column">
@@ -186,17 +201,17 @@ const FilmDetailPage = () => {
                     direction="row"
                     wrap={true}
                     align="start"
-                    margin={{top: "medium"}}
+                    margin={{ top: 'medium' }}
                     justify="between"
                   >
-                    {crewArray.map((crew, id) => 
-                    <Box key={id} margin={{ right: 'small' }}>
-                      <Text size="0.9em" weight="bold">
-                        {crew.job}
-                      </Text>
-                      <Text size="0.9em">{crew.name}</Text>
-                    </Box>
-                    )}
+                    {crewArray.map((crew, id) => (
+                      <Box key={id} margin={{ right: 'small' }}>
+                        <Text size="0.9em" weight="bold">
+                          {crew.job}
+                        </Text>
+                        <Text size="0.9em">{crew.name}</Text>
+                      </Box>
+                    ))}
                   </Box>
                 </Box>
                 <br />
