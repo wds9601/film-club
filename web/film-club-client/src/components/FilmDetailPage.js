@@ -33,6 +33,7 @@ const FilmDetailPage = () => {
     overview,
     posterPath,
     releaseDate,
+    status,
     tagline,
     title,
     videos,
@@ -192,6 +193,26 @@ const FilmDetailPage = () => {
                             {genre.name}
                           </Text>
                         ))}
+                    </Box>
+                  </Box>
+                  <Box
+                    className="text-header-group"
+                    direction="row"
+                    align="start"
+                  >
+                    <Text
+                      size="0.9em"
+                      weight="bold"
+                      margin={{ right: 'xsmall' }}
+                    >
+                      STATUS
+                    </Text>
+                    <Box direction="column">
+                      {status && (
+                        <Text size="0.9em">
+                          {status}
+                        </Text>
+                      )}
                     </Box>
                   </Box>
                 </Box>
