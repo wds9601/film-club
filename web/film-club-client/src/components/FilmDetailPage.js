@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Image, Heading, Paragraph, Text } from 'grommet'; 
+import { Box, Image, Heading, ResponsiveContext, Text } from 'grommet'; 
 
 import defaultMoviePoster from '../static/default-movie-poster.png';
 
@@ -8,7 +8,7 @@ import Header from './Header';
 
 const FilmDetailPage = () => {
   const [movieDetails, setMovieDetails] = useState({});
-  const [showVideo, setShowVideo] = useState(false);
+  // const [showVideo, setShowVideo] = useState(false);
 
   // React Router URL Parameter object
   const { id } = useParams();
@@ -25,6 +25,7 @@ const FilmDetailPage = () => {
     getMovieDetails(id);
   }, [id]);
 
+  // Deconstruct 'movieDetails' object for use in JSX
   let {
     backdropPath,
     credits,
@@ -63,12 +64,15 @@ const FilmDetailPage = () => {
     formattedReleaseDate = `${month}.${day}.${year}`;
   }
 
+  // const size = useContext()
+  // console.log(size)
+
+  // Check if movieDetail object has poster image
   if (images) {
-    // Check if movieDetail object has poster image:
     // if it does - use the poster image path for fetch
     // If it doesnt - use the default poster image
     let posterUrl = posterPath
-      ? `/films/images/poster${posterPath}?size=medium`
+      ? `/films/images/poster${posterPath}?size=small`
       : defaultMoviePoster;
 
     //  If the movieDetails payload has a videos object, filter for the official trailer
@@ -86,7 +90,6 @@ const FilmDetailPage = () => {
           crewArray.push(member);
         }
       });
-      // console.log(crewArray);
     }
 
     return (
@@ -103,38 +106,44 @@ const FilmDetailPage = () => {
         <Header />
 
         {videos[0] ? (
-          <Box
-            width="100%"
-            round="small"
-            border={{ color: 'accent-4', size: 'small' }}
-            overflow="hidden"
-          >
-            <iframe
-              title={movieTrailer.name}
+          <ResponsiveContext.Consumer>
+            {size => (
+            <Box
               width="100%"
-              height="300"
-              src={`https://www.youtube.com/embed/${movieTrailer.key}`}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-          </Box>
-        ) : (
-          <Box
-            direction="column"
-            justify="center"
-            align="center"
-            pad="small"
-            margin={{ top: 'xlarge' }}
-            round="small"
-            border={{ color: 'accent-4', size: 'small' }}
-            responsive={true}
-          >
-            <Text size="1.25em" margin="small" color="light-3">
-              No trailer for this film yet, check back soon!
-            </Text>
-          </Box>
-        )}
+              round="small"
+              border={{ color: 'accent-4', size: 'small' }}
+              overflow="hidden"
+            >
+              <iframe
+                title={movieTrailer.name}
+                // width="100%"
+                height={size <= 600 ? "350px" : "500px"}
+                src={`https://www.youtube.com/embed/${movieTrailer.key}`}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </Box>
+            )}
+            </ResponsiveContext.Consumer>
+            ) : (
+              <ResponsiveContext.Consumer>
+              <Box
+                direction="column"
+                justify="center"
+                align="center"
+                pad="small"
+                margin={{ top: 'xlarge' }}
+                round="small"
+                border={{ color: 'accent-4', size: 'small' }}
+                responsive={true}
+              >
+                <Text size="1.25em" margin="small" color="light-3">
+                  No trailer for this film yet, check back soon!
+                </Text>
+              </Box>
+            </ResponsiveContext.Consumer>
+              )}
 
         <Box
           className="poster-info-box"
@@ -145,6 +154,7 @@ const FilmDetailPage = () => {
           round="small"
           border={{ color: 'accent-4', size: 'small' }}
           margin={{ top: 'large' }}
+          width={{max: '375px'}}
         >
           <Box className="poster-box" margin={{ bottom: '1em' }}>
             <Box>
@@ -163,7 +173,7 @@ const FilmDetailPage = () => {
                   <Box
                     className="text-header-group"
                     direction="row"
-                    align="center"
+                    margin={{bottom: 'xsmall'}}
                   >
                     <Text
                       size="0.9em"
@@ -177,7 +187,7 @@ const FilmDetailPage = () => {
                   <Box
                     className="text-header-group"
                     direction="row"
-                    align="start"
+                    margin={{bottom: 'xsmall'}}
                   >
                     <Text
                       size="0.9em"
@@ -198,7 +208,6 @@ const FilmDetailPage = () => {
                   <Box
                     className="text-header-group"
                     direction="row"
-                    align="start"
                   >
                     <Text
                       size="0.9em"
