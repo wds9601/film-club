@@ -131,6 +131,12 @@ paths:
       description: Get paginated list of upcoming films
       operationId: getUpcoming
       parameters: 
+        - name: start
+          in: query
+          description: Releases should occur on or after this date. If not supplied, uses the server's current date.
+          schema:
+            type: string
+            format: date
         - name: page
           in: query
           description: The next page of contents to request
@@ -350,6 +356,8 @@ components:
           format: double
         posterPath:
           type: string
+        rating:
+          type: string
         releaseDate:
           type: string
           format: date
@@ -420,6 +428,7 @@ components:
           "overview": "A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground \"fight clubs\" forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion.",
           "popularity": 43.739,
           "posterPath": "/8kNruSfhk5IoE4eZOc4UpvDn6tq.jpg",
+          "rating": "R",
           "releaseDate": "1999-10-15",
           "revenue": 100853753,
           "runtime": 139,
