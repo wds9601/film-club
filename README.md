@@ -25,7 +25,7 @@ FilmClub is a cinematic discovery app.  Using [TheMovieDB API](https://developer
 As a front end developer, I enjoy making projects with new technologies to continue learning about software development.  This project allowed me to join forces with [gstro](https://github.com/gstro) who took on building out the backend.  Also, we like movies.
 
 These were the new tools I used developing FilmClub:
-- [Grommet](https://v2.grommet.io/) - a popular UI library  
+- [Grommet](https://v2.grommet.io/) - a popular responsive UI library 
 - [SwaggerHub/OpenAPI](https://swagger.io/resources/open-api/) collaboration tool
 
 
