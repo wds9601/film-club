@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Image, Heading, ResponsiveContext, Text } from 'grommet'; 
+import { Box, Heading, Image, ResponsiveContext, Text } from 'grommet';
 
 import defaultMoviePoster from '../static/default-movie-poster.png';
 
@@ -25,7 +25,7 @@ const FilmDetailPage = () => {
     getMovieDetails(id);
   }, [id]);
 
-  // Deconstruct 'movieDetails' object for use in JSX
+  // Deconstruct 'movieDetails' object
   let {
     backdropPath,
     credits,
@@ -75,6 +75,11 @@ const FilmDetailPage = () => {
       ? `/films/images/poster${posterPath}?size=small`
       : defaultMoviePoster;
 
+    let bannerImage = backdropPath
+      ? `/films/images/backdrop${backdropPath}?size=large`
+      : 'https://wallpaperaccess.com/full/1679629.jpg';
+    // https://wallpaperaccess.com/full/1679629.jpg
+
     //  If the movieDetails payload has a videos object, filter for the official trailer
     let movieTrailer = videos.filter((video) => video.type === 'Trailer')[0];
 
@@ -101,195 +106,217 @@ const FilmDetailPage = () => {
         overflow={{
           vertical: 'scroll',
         }}
-        pad={{ vertical: '4em', horizontal: 'large' }}
+        pad={{ vertical: '4em' }}
       >
         <Header />
 
-        {videos[0] ? (
-          <ResponsiveContext.Consumer>
-            {size => (
+        <Box className="banner-box" width="100%">
+          <Box className="banner-content-box" justify="center">
             <Box
-              width="100%"
-              round="small"
-              border={{ color: 'accent-4', size: 'small' }}
-              overflow="hidden"
+              className="backdrop-banner"
+              background={{
+                image: `url(${bannerImage})`,
+                size: 'cover',
+              }}
             >
-              <iframe
-                title={movieTrailer.name}
-                // width="100%"
-                height={size <= 600 ? "350px" : "500px"}
-                src={`https://www.youtube.com/embed/${movieTrailer.key}`}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
+              {/* <Image
+                fit
+                src={`/films/images/backdrop${backdropPath}?size=large`}
+                alt={`${title} backdrop image`}
+              /> */}
+              <Heading level="2">{title}</Heading>
             </Box>
-            )}
-            </ResponsiveContext.Consumer>
-            ) : (
-              <ResponsiveContext.Consumer>
-              <Box
-                direction="column"
-                justify="center"
-                align="center"
-                pad="small"
-                margin={{ top: 'xlarge' }}
-                round="small"
-                border={{ color: 'accent-4', size: 'small' }}
-                responsive={true}
-              >
-                <Text size="1.25em" margin="small" color="light-3">
-                  No trailer for this film yet, check back soon!
-                </Text>
-              </Box>
-            </ResponsiveContext.Consumer>
-              )}
+            <Box className="banner-text-layer"></Box>
+          </Box>
+        </Box>
 
         <Box
-          className="poster-info-box"
-          direction="column"
-          justify="around"
-          align="center"
-          pad="medium"
-          round="small"
+          className="main-container-flex"
+          direction="row"
+          justify="start"
           border={{ color: 'accent-4', size: 'small' }}
-          margin={{ top: 'large' }}
-          width={{max: '375px'}}
+          background="#333333"
         >
-          <Box className="poster-box" margin={{ bottom: '1em' }}>
-            <Box>
-              <Image src={posterUrl} alt={`${title} poster image`} />
+          <Box
+            className="poster-info-box"
+            direction="column"
+            justify="around"
+            align="center"
+            pad="medium"
+            round="small"
+            border={{ color: 'accent-4', size: 'small' }}
+            width={{ max: '375px' }}
+          >
+            <Box className="poster-box" margin={{ bottom: '1em' }}>
+              <Box>
+                <Image src={posterUrl} alt={`${title} poster image`} />
+              </Box>
             </Box>
-          </Box>
 
-          <Box className="info-box">
-            <Box className="all-text-box" text-align="start">
-              <Text size="2.75em" weight="bold">
-                {title}
-              </Text>
+            <Box className="info-box">
+              <Box className="all-text-box" text-align="start">
+                <Text size="2.75em" weight="bold">
+                  {title}
+                </Text>
 
-              <Box className="sub-text-box" pad="small">
-                <Box className="inner-sub-text-box">
-                  <Box
-                    className="text-header-group"
-                    direction="row"
-                    margin={{bottom: 'xsmall'}}
-                  >
-                    <Text
-                      size="0.9em"
-                      weight="bold"
-                      margin={{ right: 'xsmall' }}
+                <Box className="sub-text-box" pad="small">
+                  <Box className="inner-sub-text-box">
+                    <Box
+                      className="text-header-group"
+                      direction="row"
+                      margin={{ bottom: 'xsmall' }}
                     >
-                      RELEASE DATE
-                    </Text>
-                    <Text size="0.9em">{formattedReleaseDate}</Text>
-                  </Box>
-                  <Box
-                    className="text-header-group"
-                    direction="row"
-                    margin={{bottom: 'xsmall'}}
-                  >
-                    <Text
-                      size="0.9em"
-                      weight="bold"
-                      margin={{ right: 'xsmall' }}
-                    >
-                      GENRES
-                    </Text>
-                    <Box direction="column">
-                      {genres[0] &&
-                        genres.map((genre, id) => (
-                          <Text key={id} size="0.9em">
-                            {genre.name}
-                          </Text>
-                        ))}
-                    </Box>
-                  </Box>
-                  <Box
-                    className="text-header-group"
-                    direction="row"
-                  >
-                    <Text
-                      size="0.9em"
-                      weight="bold"
-                      margin={{ right: 'xsmall' }}
-                    >
-                      STATUS
-                    </Text>
-                    <Box direction="column">
-                      {status && (
-                        <Text size="0.9em">
-                          {status}
-                        </Text>
-                      )}
-                    </Box>
-                  </Box>
-                </Box>
-                <Box>
-                  <Box
-                    className="inner-sub-text-box-crew"
-                    direction="row"
-                    wrap={true}
-                    align="start"
-                    margin={{ top: 'medium' }}
-                    justify="between"
-                  >
-                    {crewArray.map((crew, id) => (
-                      <Box key={id} margin={{ right: 'small' }}>
-                        <Text size="0.9em" weight="bold">
-                          {crew.job}
-                        </Text>
-                        <Text size="0.9em">{crew.name}</Text>
-                      </Box>
-                    ))}
-                  </Box>
-                </Box>
-                <br />
-                <Box className="info-text-box" direction="column">
-                  {tagline && (
-                    <Box className="text-header-group">
                       <Text
                         size="0.9em"
-                        margin={{ top: 'xsmall', bottom: 'medium' }}
+                        weight="bold"
+                        margin={{ right: 'xsmall' }}
                       >
-                        <em>{tagline}</em>
+                        RELEASE DATE
                       </Text>
+                      <Text size="0.9em">{formattedReleaseDate}</Text>
                     </Box>
-                  )}
-                  {overview && (
-                    <Box className="text-header-group">
-                      <Text size="0.9em" margin={{ top: 'xsmall' }}>
-                        {overview}
+                    <Box
+                      className="text-header-group"
+                      direction="row"
+                      margin={{ bottom: 'xsmall' }}
+                    >
+                      <Text
+                        size="0.9em"
+                        weight="bold"
+                        margin={{ right: 'xsmall' }}
+                      >
+                        GENRES
                       </Text>
+                      <Box direction="column">
+                        {genres[0] &&
+                          genres.map((genre, id) => (
+                            <Text key={id} size="0.9em">
+                              {genre.name}
+                            </Text>
+                          ))}
+                      </Box>
                     </Box>
-                  )}
+                    <Box className="text-header-group" direction="row">
+                      <Text
+                        size="0.9em"
+                        weight="bold"
+                        margin={{ right: 'xsmall' }}
+                      >
+                        STATUS
+                      </Text>
+                      <Box direction="column">
+                        {status && <Text size="0.9em">{status}</Text>}
+                      </Box>
+                    </Box>
+                  </Box>
+                  <Box>
+                    <Box
+                      className="inner-sub-text-box-crew"
+                      direction="row"
+                      wrap={true}
+                      align="start"
+                      margin={{ top: 'medium' }}
+                      justify="between"
+                    >
+                      {crewArray.map((crew, id) => (
+                        <Box key={id} margin={{ right: 'small' }}>
+                          <Text size="0.9em" weight="bold">
+                            {crew.job}
+                          </Text>
+                          <Text size="0.9em">{crew.name}</Text>
+                        </Box>
+                      ))}
+                    </Box>
+                  </Box>
+                  <br />
+                  <Box className="info-text-box" direction="column">
+                    {tagline && (
+                      <Box className="text-header-group">
+                        <Text
+                          size="0.9em"
+                          margin={{ top: 'xsmall', bottom: 'medium' }}
+                        >
+                          <em>{tagline}</em>
+                        </Text>
+                      </Box>
+                    )}
+                    {overview && (
+                      <Box className="text-header-group">
+                        <Text size="0.9em" margin={{ top: 'xsmall' }}>
+                          {overview}
+                        </Text>
+                      </Box>
+                    )}
+                  </Box>
                 </Box>
               </Box>
             </Box>
           </Box>
-        </Box>
 
-        <Box className="hero-box" direction="row" justify="around">
-          <Box className="info-box-wrapper" direction="column" justify="start">
+          {videos[0] ? (
+            <ResponsiveContext.Consumer>
+              {(size) => (
+                <Box
+                  width="100%"
+                  round="small"
+                  border={{ color: 'accent-4', size: 'small' }}
+                  overflow="hidden"
+                >
+                  <iframe
+                    title={movieTrailer.name}
+                    // width="100%"
+                    height={size <= 600 ? '350px' : '500px'}
+                    src={`https://www.youtube.com/embed/${movieTrailer.key}`}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </Box>
+              )}
+            </ResponsiveContext.Consumer>
+          ) : (
             <Box
-              className="info-box"
               direction="column"
-              justify="start"
-              height="16em"
-            ></Box>
-          </Box>
-        </Box>
-
-        <Box className="media-box">
-          {backdropPath && (
-            <Box className="images-box">
-              <Image
-                src={`/films/images/backdrop${backdropPath}?size=small`}
-                alt={`${title} backdrop image`}
-              />
+              justify="center"
+              align="center"
+              pad="small"
+              margin={{ top: 'xlarge' }}
+              round="small"
+              border={{ color: 'accent-4', size: 'small' }}
+              responsive={true}
+            >
+              <Text size="1.25em" margin="small" color="light-3">
+                No trailer for this film yet, check back soon!
+              </Text>
             </Box>
           )}
-          {videos[0] && <Box className="videos-box"></Box>}
+
+          <Box className="hero-box" direction="row" justify="around">
+            <Box
+              className="info-box-wrapper"
+              direction="column"
+              justify="start"
+            >
+              <Box
+                className="info-box"
+                direction="column"
+                justify="start"
+                height="16em"
+              ></Box>
+            </Box>
+          </Box>
+
+          <Box className="media-box">
+            {/* {backdropPath && (
+                <Box className="images-box">
+                  <Image
+                    src={`/films/images/backdrop${backdropPath}?size=small`}
+                    alt={`${title} backdrop image`}
+                  />
+                </Box>
+              )}
+              {videos[0] && <Box className="videos-box"></Box>} */}
+          </Box>
         </Box>
       </Box>
     );
