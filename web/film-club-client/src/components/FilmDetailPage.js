@@ -188,11 +188,13 @@ const FilmDetailPage = () => {
                           width={{ max: '80%' }}
                           pad="large"
                           align="center"
+                          responsive='true'
                         >
                           <Text
-                            size="6em"
+                            size="4em"
                             weight="800"
                             margin={{ top: '0', bottom: 'small' }}
+                            
                           >
                             {title}
                           </Text>
@@ -229,18 +231,19 @@ const FilmDetailPage = () => {
                   <Box
                     className="main-container-flex"
                     direction={responsiveDirection}
-                    justify="around"
+                    justify="center"
+                    align="center"
                     background="#333333"
-                    width={{ max: '85%', min: '90%' }}
+                    width={{ max: '90%', min: '85%' }}
+                    margin={{top: "5%"}}
+                    responsive={true}
                   >
                     <Box
                       className="poster-info-box"
                       direction="column"
                       justify="around"
                       align="center"
-                      pad="medium"
-                      round="small"
-                      width={{ max: '375px' }}
+                      width={{ max: '375px', min: '375px'}}
                     >
                       <Box className="poster-box" margin={{ bottom: '1em' }}>
                         <Box>
@@ -253,10 +256,6 @@ const FilmDetailPage = () => {
 
                       <Box className="info-box">
                         <Box className="all-text-box" text-align="start">
-                          <Text size="2.75em" weight="bold">
-                            {title}
-                          </Text>
-
                           <Box className="sub-text-box" pad="small">
                             <Box className="inner-sub-text-box">
                               <Box
@@ -329,51 +328,35 @@ const FilmDetailPage = () => {
                                 ))}
                               </Box>
                             </Box>
-                            <br />
-                            <Box className="info-text-box" direction="column">
-                              {tagline && (
-                                <Box className="text-header-group">
-                                  <Text
-                                    size="0.9em"
-                                    margin={{ top: 'xsmall', bottom: 'medium' }}
-                                  >
-                                    <em>{tagline}</em>
-                                  </Text>
-                                </Box>
-                              )}
-                              {overview && (
-                                <Box className="text-header-group">
-                                  <Text size="0.9em" margin={{ top: 'xsmall' }}>
-                                    {overview}
-                                  </Text>
-                                </Box>
-                              )}
-                            </Box>
+                            
                           </Box>
                         </Box>
                       </Box>
                     </Box>
 
                     {videos[0] ? (
-                      <Box postition="relative" width="100%">
-                        <Box
-                          position="absolute"
-                          top="0"
-                          left="0"
-                          height="100%"
-                          width="100%"
-                          round="small"
-                        >
-                          <iframe
-                            position="absolute"
-                            title={movieTrailer.name}
-                            src={movieTrailer.url}
-                            height="450px"
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                          ></iframe>
-                        </Box>
+                      <Box justify="center" align="center" width="100%">
+                          {size === 'small' ? (
+                            <iframe
+                              title={movieTrailer.name}
+                              src={movieTrailer.url}
+                              height="175px"
+                              width="349px"
+                              frameBorder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            ></iframe>
+                          ) : (
+                            <iframe
+                              title={movieTrailer.name}
+                              src={movieTrailer.url}
+                              height="450px"
+                              width="750px"
+                              frameBorder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            ></iframe>
+                          )}
                       </Box>
                     ) : (
                       <Box
@@ -407,15 +390,6 @@ const FilmDetailPage = () => {
                     </Box>
 
                     <Box className="media-box">
-                      {/* {backdropPath && (
-                    <Box className="images-box">
-                      <Image
-                        src={`/films/images/backdrop${backdropPath}?size=small`}
-                        alt={`${title} backdrop image`}
-                      />
-                    </Box>
-                  )}
-                  {videos[0] && <Box className="videos-box"></Box>} */}
                     </Box>
                   </Box>
                 </Box>
