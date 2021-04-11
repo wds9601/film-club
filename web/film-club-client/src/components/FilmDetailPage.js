@@ -111,9 +111,6 @@ const FilmDetailPage = () => {
     formattedReleaseDate = `${month}.${day}.${year}`;
   }
 
-  // const size = useContext()
-  // console.log(size)
-
   // Check if movieDetail object has poster image
   if (images) {
     // if it does - use the poster image path for fetch
@@ -188,13 +185,12 @@ const FilmDetailPage = () => {
                           width={{ max: '80%' }}
                           pad="large"
                           align="center"
-                          responsive='true'
+                          responsive="true"
                         >
                           <Text
                             size="4em"
                             weight="800"
                             margin={{ top: '0', bottom: 'small' }}
-                            
                           >
                             {title}
                           </Text>
@@ -235,7 +231,7 @@ const FilmDetailPage = () => {
                     align="center"
                     background="#333333"
                     width={{ max: '90%', min: '85%' }}
-                    margin={{top: "5%"}}
+                    margin={{ top: '5%' }}
                     responsive={true}
                   >
                     <Box
@@ -243,7 +239,7 @@ const FilmDetailPage = () => {
                       direction="column"
                       justify="around"
                       align="center"
-                      width={{ max: '375px', min: '375px'}}
+                      width={{ max: '375px', min: '375px' }}
                     >
                       <Box className="poster-box" margin={{ bottom: '1em' }}>
                         <Box>
@@ -328,7 +324,6 @@ const FilmDetailPage = () => {
                                 ))}
                               </Box>
                             </Box>
-                            
                           </Box>
                         </Box>
                       </Box>
@@ -336,27 +331,27 @@ const FilmDetailPage = () => {
 
                     {videos[0] ? (
                       <Box justify="center" align="center" width="100%">
-                          {size === 'small' ? (
-                            <iframe
-                              title={movieTrailer.name}
-                              src={movieTrailer.url}
-                              height="175px"
-                              width="349px"
-                              frameBorder="0"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                            ></iframe>
-                          ) : (
-                            <iframe
-                              title={movieTrailer.name}
-                              src={movieTrailer.url}
-                              height="450px"
-                              width="750px"
-                              frameBorder="0"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                            ></iframe>
-                          )}
+                        {size === 'small' ? (
+                          <iframe
+                            title={movieTrailer.name}
+                            src={movieTrailer.url}
+                            height="175px"
+                            width="349px"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          ></iframe>
+                        ) : (
+                          <iframe
+                            title={movieTrailer.name}
+                            src={movieTrailer.url}
+                            height="450px"
+                            width="750px"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          ></iframe>
+                        )}
                       </Box>
                     ) : (
                       <Box
@@ -389,8 +384,7 @@ const FilmDetailPage = () => {
                       </Box>
                     </Box>
 
-                    <Box className="media-box">
-                    </Box>
+                    <Box className="media-box"></Box>
                   </Box>
                 </Box>
               </Box>
