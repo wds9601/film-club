@@ -105,7 +105,8 @@ function Home(props) {
                   <PosterCard
                     setMovieId={props.setMovieId}
                     movie={movie}
-                    key={index}
+										key={index}
+										theme={customBreakpoints}
                   />
                 </Link>
               )}
